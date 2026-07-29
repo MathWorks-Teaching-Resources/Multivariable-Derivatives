@@ -82,15 +82,15 @@ classdef ProjectStartupApp < matlab.apps.AppBase
         % Close request function: StartUpAppUIFigure
         function StartUpAppUIFigureCloseRequest(app, event)
             if event.Source == app.READMEButton
-                open README.mlx
+                open README.m
             elseif event.Source == app.MainMenuButton
-                open MainMenu.mlx
+                open MainMenu.m
             elseif event.Source == app.FacultyButton
-                open MainMenu.mlx            
+                open MainMenu.m            
             elseif event.Source == app.StudentButton
-                open MainMenu.mlx
+                open MainMenu.m
             elseif event.Source == app.OtherButton
-                open MainMenu.mlx
+                open MainMenu.m
             else
                 disp("Thank you for your time.")
             end
