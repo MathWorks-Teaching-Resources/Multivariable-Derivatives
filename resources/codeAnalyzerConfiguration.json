@@ -1,0 +1,24 @@
+{
+// Configuration File Information
+
+    "name": "Educator Enablement Team",
+    "description": "Internal MATLAB Coding Guideline",
+    "author" : "Emma",
+    "schemaVersion" : "1.1.0",
+    "guidelineVersion" : "1.0.0",
+
+// New and Modified Checks
+
+    "naming": 
+    {
+        "localFunction":
+            {
+                "casing": "UpperCamelCase"
+            },
+
+        "variable":
+            {
+                "casing": ["lowercase", "UpperCamelCase"]
+            },
+    }
+}
