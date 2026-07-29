@@ -1,16 +1,16 @@
-%[text]# Partial Differentiation
-%[text][⇦ Main Menu](file:../../MainMenu.m)
-%[text]Many quantities in science, engineering, economics, and data science depend on more than one input. Temperature depends on location, profit depends on both price and demand, and elevation above sea level depends on both latitude and longitude. The method of gradient descent, which is a standard optimization method, requires you to track how a function changes with respect to many variables at once. Partial derivatives let us isolate the effect of one variable, while gradients combine this information to describe the direction of steepest change. These ideas form the mathematical foundation of optimization algorithms such as gradient descent and sensitivity analysis, which power machine learning and data-driven decision-making.
+%[text] # Partial Differentiation
+%[text] [⇦ Main Menu](file:../../MainMenu.m)
+%[text] Many quantities in science, engineering, economics, and data science depend on more than one input. Temperature depends on location, profit depends on both price and demand, and elevation above sea level depends on both latitude and longitude. The method of gradient descent, which is a standard optimization method, requires you to track how a function changes with respect to many variables at once. Partial derivatives let us isolate the effect of one variable, while gradients combine this information to describe the direction of steepest change. These ideas form the mathematical foundation of optimization algorithms such as gradient descent and sensitivity analysis, which power machine learning and data-driven decision-making.
 %[text:tableOfContents]{"heading":"Table of Contents"}
-%[text]This live script is intended to be used both with the code visible and output inline, and with the code hidden. On the **View** tab of the MATLAB Toolstrip, in the **View** section, select **Output Inline** or **Hide Code**. Alternatively, switch between **Output Inline** using the icon ![live script output inline icon](text:image:6663) and **Hide Code** using the icon ![live script code hidden icon](text:image:6cf6) at the top right of the Live Editor pane. Sections with interactive visualizations are often easier to use when the code is hidden, but you are always free to explore how the code works.
-%[text]![Lightbulb mark](text:image:62fe) Interacting with this live script will build some familiarity with MATLAB as concepts and commands are introduced together. If you need more instruction, consider taking [MATLAB Onramp](https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted), a free 2-hour online tutorial that teaches the essentials of MATLAB.
-%[text]![Warning symbol](text:image:8ece) For an optimal experience, follow the instructions and steps in the given sequence. Proceed to a new section only after completing the preceding one. Some sections depend on variables created in prior sections, and they may generate errors if run out of order.
-%[text]The ![Try this icon](text:image:0d75) and ![Exercise icon](text:image:0d89) icons refer to two different types of interactive activities that you will find in this script. The ![Try this icon](text:image:2837) usually indicates an interaction in which you will explore a visualization of a concept introduced in this script. The ![Exercise icon](text:image:8c3a) interactions are designed to challenge your understanding of those concepts.
+%[text] This live script is intended to be used both with the code visible and output inline, and with the code hidden. On the **View** tab of the MATLAB Toolstrip, in the **View** section, select **Output Inline** or **Hide Code**. Alternatively, switch between **Output Inline** using the icon ![live script output inline icon](text:image:6663) and **Hide Code** using the icon ![live script code hidden icon](text:image:6cf6) at the top right of the Live Editor pane. Sections with interactive visualizations are often easier to use when the code is hidden, but you are always free to explore how the code works.
+%[text] ![Lightbulb mark](text:image:62fe) Interacting with this live script will build some familiarity with MATLAB as concepts and commands are introduced together. If you need more instruction, consider taking [MATLAB Onramp](https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted), a free 2-hour online tutorial that teaches the essentials of MATLAB.
+%[text] ![Warning symbol](text:image:8ece) For an optimal experience, follow the instructions and steps in the given sequence. Proceed to a new section only after completing the preceding one. Some sections depend on variables created in prior sections, and they may generate errors if run out of order.
+%[text] The ![Try this icon](text:image:0d75) and ![Exercise icon](text:image:0d89) icons refer to two different types of interactive activities that you will find in this script. The ![Try this icon](text:image:2837) usually indicates an interaction in which you will explore a visualization of a concept introduced in this script. The ![Exercise icon](text:image:8c3a) interactions are designed to challenge your understanding of those concepts.
 %%
-%[text]## Background
-%[text]In single‑variable calculus, the derivative measures the rate of change of a function with respect to one variable. In multivariable calculus, functions often take the form
-%[text]{"align":"center"}$f(x,y)${"altText":"f(x,y)"}, $f(x,y,z)${"altText":"f(x,y,z)"}, or more generally $f(\\mathbb{\\vec{x})${"altText":"f(\mathbb{\vec{x})"}.
-%[text]When there are two independent variables, we can visualize such functions as surfaces in 3D space. The calculus behaves the same way in higher dimensions, but visualization is more difficult.
+%[text] ## Background
+%[text] In single‑variable calculus, the derivative measures the rate of change of a function with respect to one variable. In multivariable calculus, functions often take the form
+%[text]{"align":"center"} $f(x,y)${"altText":"f(x,y)"}, $f(x,y,z)${"altText":"f(x,y,z)"}, or more generally $f(\\mathbb{\\vec{x})${"altText":"f(\mathbb{\vec{x})"}.
+%[text] When there are two independent variables, we can visualize such functions as surfaces in 3D space. The calculus behaves the same way in higher dimensions, but visualization is more difficult.
 % Define matrix values for x and y covering the domain {-3 <= x,y <= 3} %[text:anchor:M_43d6]
 [x,y] = meshgrid(-3:0.1:3);
 % Note the use of .^ and .* for component-wise operations
@@ -21,76 +21,76 @@ xlabel("x") %[output:95a90352]
 ylabel("y") %[output:95a90352]
 zlabel("f(x,y)") %[output:95a90352]
 title('A Function of Two Variables') %[output:95a90352]
-%[text]Because multiple inputs vary independently, we study change in one direction at a time. Partial derivatives isolate the effect of changing one variable while treating all others as constants.
-%[text]![Try icon](text:image:422d) **Try**. [Change the definition](internal:M_43d6) of $f(x,y)${"altText":"f(x,y)"} to other functions of `x` and `y`. Plot the new surface.
-%[text]![Reflect icon](text:image:9aab) **Reflect**. How would you describe how the function is changing?
+%[text] Because multiple inputs vary independently, we study change in one direction at a time. Partial derivatives isolate the effect of changing one variable while treating all others as constants.
+%[text] ![Try icon](text:image:422d) **Try**. [Change the definition](internal:M_43d6) of $f(x,y)${"altText":"f(x,y)"} to other functions of `x` and `y`. Plot the new surface.
+%[text] ![Reflect icon](text:image:9aab) **Reflect**. How would you describe how the function is changing?
 %%
-%[text]## Definition of Partial Derivatives
-%[text]%[text:anchor:M_1b8c] A partial derivative measures how the function changes when one variable changes and the others are held constant. This is the rate of change of $f${"altText":"f"} with respect to a given variable. The same limit definition for the derivative applies, with only one variable allowed to change at a time. Say $f${"altText":"f"} is a function of four variables, $f(x,y,z,w)${"altText":"f(x,y,z,w)"}.
-%[text]The partial derivative of $f${"altText":"f"} with respect to $x${"altText":"x"} is:
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial x}(x,y,z,w)= \\lim\_{⁡h\\to 0} \\frac{f(x+h,y,z,w)-f(x,y,z,w)}{h}${"altText":"\frac{\partial f}{\partial x}(x,y,z,w)= \lim\_{⁡h\to 0} \frac{f(x+h,y,z,w)-f(x,y,z,w)}{h}"}
-%[text]The partial derivative of $f${"altText":"f"} with respect to $z${"altText":"z"} is:
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial z}(x,y,z,w)= \\lim\_{⁡h\\to 0} \\frac{f(x,y,z+h,w)-f(x,y,z,w)}{h}${"altText":"\frac{\partial f}{\partial z}(x,y,z,w)= \lim\_{⁡h\to 0} \frac{f(x,y,z+h,w)-f(x,y,z,w)}{h}"}
-%[text]**Key idea:** To compute a partial derivative with respect to any variable, treat all other variables as constants.
-%[text]## Computing Partial Derivatives
-%[text]**Example 1:** Polynomial Function
-%[text]{"align":"center"}$f(x,y)=x^2y+3y^2${"altText":"f(x,y)=x^2y+3y^2"}
-%[text]- With respect to $x${"altText":"x"}: \
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial x} = 2xy${"altText":"\frac{\partial f}{\partial x} = 2xy"}
-%[text]- With respect to $y${"altText":"y"}: \
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial y} = x^2+6y${"altText":"\frac{\partial f}{\partial y} = x^2+6y"}
-%[text]**Using Symbolic Computation:**
+%[text] ## Definition of Partial Derivatives
+%[text] %[text:anchor:M_1b8c] A partial derivative measures how the function changes when one variable changes and the others are held constant. This is the rate of change of $f${"altText":"f"} with respect to a given variable. The same limit definition for the derivative applies, with only one variable allowed to change at a time. Say $f${"altText":"f"} is a function of four variables, $f(x,y,z,w)${"altText":"f(x,y,z,w)"}.
+%[text] The partial derivative of $f${"altText":"f"} with respect to $x${"altText":"x"} is:
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial x}(x,y,z,w)= \\lim\_{⁡h\\to 0} \\frac{f(x+h,y,z,w)-f(x,y,z,w)}{h}${"altText":"\frac{\partial f}{\partial x}(x,y,z,w)= \lim\_{⁡h\to 0} \frac{f(x+h,y,z,w)-f(x,y,z,w)}{h}"}
+%[text] The partial derivative of $f${"altText":"f"} with respect to $z${"altText":"z"} is:
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial z}(x,y,z,w)= \\lim\_{⁡h\\to 0} \\frac{f(x,y,z+h,w)-f(x,y,z,w)}{h}${"altText":"\frac{\partial f}{\partial z}(x,y,z,w)= \lim\_{⁡h\to 0} \frac{f(x,y,z+h,w)-f(x,y,z,w)}{h}"}
+%[text] **Key idea:** To compute a partial derivative with respect to any variable, treat all other variables as constants.
+%[text] ## Computing Partial Derivatives
+%[text] **Example 1:** Polynomial Function
+%[text]{"align":"center"} $f(x,y)=x^2y+3y^2${"altText":"f(x,y)=x^2y+3y^2"}
+%[text] - With respect to $x${"altText":"x"}: \
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial x} = 2xy${"altText":"\frac{\partial f}{\partial x} = 2xy"}
+%[text] - With respect to $y${"altText":"y"}: \
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial y} = x^2+6y${"altText":"\frac{\partial f}{\partial y} = x^2+6y"}
+%[text] **Using Symbolic Computation:**
 syms x y %[text:anchor:M_4cdc]
 f = x^2*y + 3*y^2; %[control:editfield:5b60]{"position":[5,18]}
 fx = diff(f,x) %[output:17bfc001]
 fy = diff(f,y) %[output:770c7303]
-%[text]![Finger touching surface](text:image:6af8) **Try**. Edit the function [`f = x^2*y + 3*y^2;`](internal:M_4cdc) and run the section again. Can you define a function where $\\frac{\\partial f}{\\partial x} = 0${"altText":"\frac{\partial f}{\partial x} = 0"}? Or a function with $\\frac{\\partial f}{\\partial y} = 2xy+\\sin(x)${"altText":"\frac{\partial f}{\partial y} = 2xy+\sin(x)"}? Can you define a function with $\\frac{\\partial f}{\\partial x} = 3y${"altText":"\frac{\partial f}{\partial x} = 3y"} and $\\frac{\\partial f}{\\partial y} = xy^2${"altText":"\frac{\partial f}{\partial y} = xy^2"}? Why or why not?
+%[text] ![Finger touching surface](text:image:6af8) **Try**. Edit the function [`f = x^2*y + 3*y^2;`](internal:M_4cdc) and run the section again. Can you define a function where $\\frac{\\partial f}{\\partial x} = 0${"altText":"\frac{\partial f}{\partial x} = 0"}? Or a function with $\\frac{\\partial f}{\\partial y} = 2xy+\\sin(x)${"altText":"\frac{\partial f}{\partial y} = 2xy+\sin(x)"}? Can you define a function with $\\frac{\\partial f}{\\partial x} = 3y${"altText":"\frac{\partial f}{\partial x} = 3y"} and $\\frac{\\partial f}{\\partial y} = xy^2${"altText":"\frac{\partial f}{\partial y} = xy^2"}? Why or why not?
 %%
-%[text]![Exercise icon](text:image:6f78) **Exercise 1.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
+%[text] ![Exercise icon](text:image:6f78) **Exercise 1.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
   %[control:button:65a7]{"position":[1,2]}
 [myFun,myVar] = GenerateExercise1(3); %[output:6d79983b]
 %%
-%[text]Enter your solution in the [edit field](internal:M_18e5):
+%[text] Enter your solution in the [edit field](internal:M_18e5):
 myDerivative = str2sym(""); %[control:editfield:373a]{"position":[24,26]} %[text:anchor:M_18e5]
 myDerivative = diff(myFun,myVar);
   %[control:button:6f99]{"position":[1,2]}
 CheckEx1(myDerivative,myFun,myVar) %[output:5af9bc1b] %[output:691d6dc4]
 %%
-%[text]%[text:anchor:M_27cc] **Geometric Interpretation**
-%[text]- $\\frac{\\partial f}{\\partial x}${"altText":"\frac{\partial f}{\partial x}"}: slope of the curve formed by slicing the surface $z=f(x,y)${"altText":"z=f(x,y)"} at constant $y${"altText":"y"}
-%[text]- $\\frac{\\partial f}{\\partial y}${"altText":"\frac{\partial f}{\partial y}"}: slope of the curve formed by slicing the surface $z=f(x,y)${"altText":"z=f(x,y)"} at constant $x${"altText":"x"} \
-%[text]Visualize the geometry for the surface $z = x^2y + 3y^2${"altText":"z = x^2y + 3y^2"} over the region $-5 \\leq x,y \\leq 5${"altText":"-5 \leq x,y \leq 5"}.
+%[text] %[text:anchor:M_27cc] **Geometric Interpretation**
+%[text] - $\\frac{\\partial f}{\\partial x}${"altText":"\frac{\partial f}{\partial x}"}: slope of the curve formed by slicing the surface $z=f(x,y)${"altText":"z=f(x,y)"} at constant $y${"altText":"y"}
+%[text] - $\\frac{\\partial f}{\\partial y}${"altText":"\frac{\partial f}{\partial y}"}: slope of the curve formed by slicing the surface $z=f(x,y)${"altText":"z=f(x,y)"} at constant $x${"altText":"x"} \
+%[text] Visualize the geometry for the surface $z = x^2y + 3y^2${"altText":"z = x^2y + 3y^2"} over the region $-5 \\leq x,y \\leq 5${"altText":"-5 \leq x,y \leq 5"}.
   %[control:button:2a90]{"position":[1,2]}
 
 [MyXLine,MyYLine,lgd] = DrawSlicesOnPlot; %[output:78489007]
-%[text]See code for [`DrawSlicesOnPlot`](internal:M_3a50).
+%[text] See code for [`DrawSlicesOnPlot`](internal:M_3a50).
 %%
-%[text]%[text:anchor:M_39b8] Select the 'constant' values to slice along. Changing the slider values will cause the section to execute, or you can click the **Update plot** button.
+%[text] %[text:anchor:M_39b8] Select the 'constant' values to slice along. Changing the slider values will cause the section to execute, or you can click the **Update plot** button.
   %[control:button:429b]{"position":[1,2]}
 ConstX = -2;   % Select the constant value of x %[control:slider:0ebf]{"position":[10,12]}
 ConstY = 3.04;   % Select the constant value of y %[control:slider:8532]{"position":[10,14]}
 
 MoveLinesOnPlot(ConstX,ConstY,MyXLine,MyYLine,lgd) %[output:9c2554a4]
-%[text]See code for [`MoveLinesOnPlot`](internal:M_0d97)`.`
-%[text]These ideas connect directly to tangent planes, developed later in multivariable calculus.
+%[text] See code for [`MoveLinesOnPlot`](internal:M_0d97)`.`
+%[text] These ideas connect directly to tangent planes, developed later in multivariable calculus.
 %%
-%[text]![Exercise icon](text:image:8704) **Exercise 2.** A company's profit depends on the selling price of the product, $p${"altText":"p"}, the budget spent on advertising, $b${"altText":"b"}, and the number of units sold, $N${"altText":"N"}, as a proxy for economies of scale in manufacturing. Let's express this as a function
-%[text]{"align":"center"}$\\text{Profit} = W(p,b,N)${"altText":"\text{Profit} = W(p,b,N)"}.
-%[text]If, at your current values of $p${"altText":"p"}, $b${"altText":"b"}, and $N${"altText":"N"}, $\\frac{\\partial W}{\\partial b} \> 0${"altText":"\frac{\partial W}{\partial b} \> 0"} , should you increase or decrease your advertising budget to increase profits?
-%[text]A. Increase the budget
-%[text]B. Decrease the budget
-%[text]C. It depends on the values of $p${"altText":"p"}, $b${"altText":"b"}, and $N${"altText":"N"}
-%[text]D. This question isn't answerable without additional information
+%[text] ![Exercise icon](text:image:8704) **Exercise 2.** A company's profit depends on the selling price of the product, $p${"altText":"p"}, the budget spent on advertising, $b${"altText":"b"}, and the number of units sold, $N${"altText":"N"}, as a proxy for economies of scale in manufacturing. Let's express this as a function
+%[text]{"align":"center"} $\\text{Profit} = W(p,b,N)${"altText":"\text{Profit} = W(p,b,N)"}.
+%[text] If, at your current values of $p${"altText":"p"}, $b${"altText":"b"}, and $N${"altText":"N"}, $\\frac{\\partial W}{\\partial b} \> 0${"altText":"\frac{\partial W}{\partial b} \> 0"} , should you increase or decrease your advertising budget to increase profits?
+%[text] A. Increase the budget
+%[text] B. Decrease the budget
+%[text] C. It depends on the values of $p${"altText":"p"}, $b${"altText":"b"}, and $N${"altText":"N"}
+%[text] D. This question isn't answerable without additional information
 CheckEx2(2) %[control:dropdown:08a1]{"position":[10,11]} %[output:765bdcc5]
 %%
-%[text]## The Gradient Vector
-%[text]The **gradient** collects all partial derivatives:
-%[text]{"align":"center"}$\\nabla f = \\left\[ \\matrix{\\frac{\\partial f}{\\partial x} & \\frac{\\partial f}{\\partial y}}\\right\]${"altText":"\nabla f = \left\[ \matrix{\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y}}\right\]"}.
-%[text]The result is a vector that points in the direction of maximum increase, and the magnitude of the gradient measures how steeply the slope is changing.
-%[text]### Remember 2D Contour Plots
-%[text]For example, consider a function $f(x, y) = x^2 + y^2${"altText":"f(x, y) = x^2 + y^2"}, which describes a paraboloid surface. A contour plot of a function is calculated by determining contours: lines of constant value, $f(x,y)=c${"altText":"f(x,y)=c"}, for different values of $c${"altText":"c"}. (For coverage of contour plots, see [Multivariable: Space & Functions](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions).) In the case of $f(x,y) = x^2+y^2${"altText":"f(x,y) = x^2+y^2"}, this becomes $x^2+y^2=c${"altText":"x^2+y^2=c"}, so the contour plot consists of concentric circles of radius $\\sqrt{c}${"altText":"\sqrt{c}"} centered at the origin. The gradient of $f${"altText":"f"} is
-%[text]{"align":"center"}$\\nabla f = \\left\[\\matrix{2x & 2y}\\right\]${"altText":"\nabla f = \left\[\matrix{2x & 2y}\right\]"}.
-%[text]Plotting this, we have:
+%[text] ## The Gradient Vector
+%[text] The **gradient** collects all partial derivatives:
+%[text]{"align":"center"} $\\nabla f = \\left\[ \\matrix{\\frac{\\partial f}{\\partial x} & \\frac{\\partial f}{\\partial y}}\\right\]${"altText":"\nabla f = \left\[ \matrix{\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y}}\right\]"}.
+%[text] The result is a vector that points in the direction of maximum increase, and the magnitude of the gradient measures how steeply the slope is changing.
+%[text] ### Remember 2D Contour Plots
+%[text] For example, consider a function $f(x, y) = x^2 + y^2${"altText":"f(x, y) = x^2 + y^2"}, which describes a paraboloid surface. A contour plot of a function is calculated by determining contours: lines of constant value, $f(x,y)=c${"altText":"f(x,y)=c"}, for different values of $c${"altText":"c"}. (For coverage of contour plots, see [Multivariable: Space & Functions](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions).) In the case of $f(x,y) = x^2+y^2${"altText":"f(x,y) = x^2+y^2"}, this becomes $x^2+y^2=c${"altText":"x^2+y^2=c"}, so the contour plot consists of concentric circles of radius $\\sqrt{c}${"altText":"\sqrt{c}"} centered at the origin. The gradient of $f${"altText":"f"} is
+%[text]{"align":"center"} $\\nabla f = \\left\[\\matrix{2x & 2y}\\right\]${"altText":"\nabla f = \left\[\matrix{2x & 2y}\right\]"}.
+%[text] Plotting this, we have:
   %[control:button:7cc9]{"position":[1,2]}
 if ~exist("vec","var") || ~isnumeric(x)
     n = 6;
@@ -116,9 +116,9 @@ ylim([-6 6]) %[output:25987832]
 title("A Gradient Plot") %[output:25987832]
 xlabel("x") %[output:25987832]
 ylabel("y") %[output:25987832]
-%[text]**Note:** This interaction and the next can be easier to view using **Hide Code** with the icon ![live script code hidden icon](text:image:0807) on the top right.
+%[text] **Note:** This interaction and the next can be easier to view using **Hide Code** with the icon ![live script code hidden icon](text:image:0807) on the top right.
 %%
-%[text]![Lightbulb](text:image:1b12) **Reflect**. What do you notice about the contour plot relative to the gradient plot?
+%[text] ![Lightbulb](text:image:1b12) **Reflect**. What do you notice about the contour plot relative to the gradient plot?
   %[control:button:37c0]{"position":[1,2]}
 figure %[output:61a6b68f]
 n = 6;
@@ -138,9 +138,9 @@ ylim([-8 8]) %[output:61a6b68f]
 xlabel("x") %[output:61a6b68f]
 ylabel("y") %[output:61a6b68f]
 zlabel("z") %[output:61a6b68f]
-%[text]![Try icon](text:image:8167) **Try**. Click the figure to focus. Then, use the ![Rotate 3D icon](text:image:0290) to rotate this figure. The surface is plotted as translucent (`FaceAlpha=0.5`). Using the dropdown, you can choose a mesh style or turn it off.
+%[text] ![Try icon](text:image:8167) **Try**. Click the figure to focus. Then, use the ![Rotate 3D icon](text:image:0290) to rotate this figure. The surface is plotted as translucent (`FaceAlpha=0.5`). Using the dropdown, you can choose a mesh style or turn it off.
 %%
-%[text]![Try icon](text:image:7c1b) **Try**. The function $f(x,y) = x^2+y^2${"altText":"f(x,y) = x^2+y^2"} was shown above. Design a new surface for yourself and observe the different gradient plots.
+%[text] ![Try icon](text:image:7c1b) **Try**. The function $f(x,y) = x^2+y^2${"altText":"f(x,y) = x^2+y^2"} was shown above. Design a new surface for yourself and observe the different gradient plots.
 figure %[output:6e1ac291]
 syms x y
 f = (x^3*y^2-y^3*x^2)/(x^2+y^2);        % Define a function f(x,y) %[control:editfield:1b24]{"position":[5,32]}
@@ -173,35 +173,35 @@ title("A gradient plot of $f(x,y) =" + latex(f) + "$", Interpreter="latex") %[ou
 xlabel("x") %[output:6e1ac291]
 ylabel("y") %[output:6e1ac291]
 %%
-%[text]![Exercise icon](text:image:4a97) **Exercise 3.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
+%[text] ![Exercise icon](text:image:4a97) **Exercise 3.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
   %[control:button:540c]{"position":[1,2]}
 [myFun,myVars] = GenerateExercise3(randi([2 3],1)); %[output:2c698237]
 %%
-%[text]Enter your solution in the [edit field](internal:M_025d):
+%[text] Enter your solution in the [edit field](internal:M_025d):
 myGradient = str2sym(""); %[control:editfield:1e1b]{"position":[22,24]} %[text:anchor:M_025d]
 myGradient = gradient(myFun,myVars);
   %[control:button:5c6d]{"position":[1,2]}
 CheckEx3(myGradient,myFun,myVars) %[output:599db840] %[output:72f8883c]
 %%
-%[text]%[text:anchor:M_6305] ## Directional Derivatives
-%[text]A **directional derivative** measures the rate of change of $f${"altText":"f"} in a given direction $\\vec{u}${"altText":"\vec{u}"}.
-%[text]{"align":"center"}$D\_{\\vec{u}}f = \\nabla f \\cdot \\frac{\\vec{u}}{||\\vec{u}||}${"altText":"D\_{\vec{u}}f = \nabla f \cdot \frac{\vec{u}}{||\vec{u}||}"}
-%[text]
-%[text]**Example:** Consider the values of $D\_{\\vec{u}}f${"altText":"D\_{\vec{u}}f"} that can be computed at a single point.
+%[text] %[text:anchor:M_6305] ## Directional Derivatives
+%[text] A **directional derivative** measures the rate of change of $f${"altText":"f"} in a given direction $\\vec{u}${"altText":"\vec{u}"}.
+%[text]{"align":"center"} $D\_{\\vec{u}}f = \\nabla f \\cdot \\frac{\\vec{u}}{||\\vec{u}||}${"altText":"D\_{\vec{u}}f = \nabla f \cdot \frac{\vec{u}}{||\vec{u}||}"}
+%[text] 
+%[text] **Example:** Consider the values of $D\_{\\vec{u}}f${"altText":"D\_{\vec{u}}f"} that can be computed at a single point.
   %[control:button:8d75]{"position":[1,2]}
 x0 = 1; y0 = 2; %[control:slider:8e3a]{"position":[6,7]} %[control:slider:7f9f]{"position":[14,15]}
 [MyXLine,MyYLine,lgd] = DrawSlicesOnPlot; %[output:9b350966]
 MoveLinesOnPlot(x0,y0,MyXLine,MyYLine,lgd) %[output:9b350966]
 u = [1 1]; FamilyOfUs = false; %[control:editfield:7521]{"position":[5,10]} %[control:checkbox:859d]{"position":[25,30]}
 AddDirectionalDerivative(gca,x0,y0,u,lgd,ManyUs=FamilyOfUs) %[output:9b350966]
-%[text]See code for [`AddDirectionalDerivative`](internal:M_48d7).
-%[text]![Try icon](text:image:26cd) **Try**. Change the point $(x\_0,y\_0)${"altText":"(x\_0,y\_0)"} and the vector $\\vec{u}${"altText":"\vec{u}"}. What do you observe?
+%[text] See code for [`AddDirectionalDerivative`](internal:M_48d7).
+%[text] ![Try icon](text:image:26cd) **Try**. Change the point $(x\_0,y\_0)${"altText":"(x\_0,y\_0)"} and the vector $\\vec{u}${"altText":"\vec{u}"}. What do you observe?
 %%
-%[text]%[text:anchor:M_97b4] **Example:** Consider the values of $D\_\\vec{u} f${"altText":"D\_\vec{u} f"} that are computed for the same vector $\\vec{u}${"altText":"\vec{u}"} at different points $(x,y)${"altText":"(x,y)"}.
+%[text] %[text:anchor:M_97b4] **Example:** Consider the values of $D\_\\vec{u} f${"altText":"D\_\vec{u} f"} that are computed for the same vector $\\vec{u}${"altText":"\vec{u}"} at different points $(x,y)${"altText":"(x,y)"}.
 clearvars f
 syms x y z
 assume([x y z],"real")
-%[text]Choose values for the function and the vector and run the example to compute the directional derivative and visualize the result.
+%[text] Choose values for the function and the vector and run the example to compute the directional derivative and visualize the result.
   %[control:button:582b]{"position":[1,2]} %[text:anchor:M_789f]
 f_Function =1/(50*x^3*y^2-100*y^3*x^2);  % 1/(50*x^3*y^2-100*y^3*x^2) %[control:editfield:1f59]{"position":[13,39]}
 u = [x -y]; %[control:editfield:954e]{"position":[5,11]}
@@ -211,17 +211,17 @@ uNorm = u/norm(u);
 
 Du = simplify(dot(gradf,uNorm));
 displayFormula("D_u*f == Du") %[output:43f8cd4d]
-%[text]**Visualization**
+%[text] **Visualization**
 VisualizeDirectionalDerivative(gradf,uNorm,u,f_Function,MaxMin=1.8,Refinement=6) %[output:720e728a]
-%[text]See code for [`VisualizeDirectionalDerivative`](internal:M_4789).
-%[text]![Try icon](text:image:05a0) **Try**. Change the [function](internal:M_789f) `f_Function` and the vector `u`. Also, rotate the plot to view the results from different directions. What do you notice?
-%[text]What if `f_Function = 1/(50*x^3*y^2-100*y^3*x^2)`? You may want to set `MaxMin=2` for clearer viewing. By looking at the gradient, can you explain why the graph goes crazy?
+%[text] See code for [`VisualizeDirectionalDerivative`](internal:M_4789).
+%[text] ![Try icon](text:image:05a0) **Try**. Change the [function](internal:M_789f) `f_Function` and the vector `u`. Also, rotate the plot to view the results from different directions. What do you notice?
+%[text] What if `f_Function = 1/(50*x^3*y^2-100*y^3*x^2)`? You may want to set `MaxMin=2` for clearer viewing. By looking at the gradient, can you explain why the graph goes crazy?
 %%
-%[text]![Exercise icon](text:image:7869) **Exercise 4.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
+%[text] ![Exercise icon](text:image:7869) **Exercise 4.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
   %[control:button:3a91]{"position":[1,2]}
 [myFun,myVec,myVars] = GenerateExercise4(randi([2 3],1)); %[output:43fbf3c3]
 %%
-%[text]Enter your solution in the [edit field](internal:M_3393).
+%[text] Enter your solution in the [edit field](internal:M_3393).
 myDu = str2sym("0"); %[control:editfield:5582]{"position":[16,19]} %[text:anchor:M_3393]
 syms x y z t w
 assume([x y z t w],"real")
@@ -229,15 +229,15 @@ myDu = dot(gradient(myFun,myVars),myVec)/norm(myVec) %[output:06361dc9]
   %[control:button:9f6f]{"position":[1,2]}
 CheckEx4(myDu,myFun,myVec,myVars) %[output:6a027b28]
 %%
-%[text]## Chain Rule for Partial Derivatives
-%[text]Let $z=f(x,y)${"altText":"z=f(x,y)"} have continuous partial derivatives with respect to both $x${"altText":"x"} and $y${"altText":"y"}, and say that $x=x(t)${"altText":"x=x(t)"}, $y=y(t)${"altText":"y=y(t)"} are differentiable functions of $t${"altText":"t"}. Then
-%[text]{"align":"center"}$\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}${"altText":"\frac{dz}{dt} = \frac{\partial f}{\partial x}\frac{dx}{dt} + \frac{\partial f}{\partial y}\frac{dy}{dt}"}
-%[text]**Example**
-%[text]Compute the derivative $\\frac{dz}{dt}${"altText":"\frac{dz}{dt}"} if $z = x^2+y^2${"altText":"z = x^2+y^2"} and $x = t^2${"altText":"x = t^2"} and $y= \\sin(t)${"altText":"y= \sin(t)"}.
+%[text] ## Chain Rule for Partial Derivatives
+%[text] Let $z=f(x,y)${"altText":"z=f(x,y)"} have continuous partial derivatives with respect to both $x${"altText":"x"} and $y${"altText":"y"}, and say that $x=x(t)${"altText":"x=x(t)"}, $y=y(t)${"altText":"y=y(t)"} are differentiable functions of $t${"altText":"t"}. Then
+%[text]{"align":"center"} $\\frac{dz}{dt} = \\frac{\\partial f}{\\partial x}\\frac{dx}{dt} + \\frac{\\partial f}{\\partial y}\\frac{dy}{dt}${"altText":"\frac{dz}{dt} = \frac{\partial f}{\partial x}\frac{dx}{dt} + \frac{\partial f}{\partial y}\frac{dy}{dt}"}
+%[text] **Example**
+%[text] Compute the derivative $\\frac{dz}{dt}${"altText":"\frac{dz}{dt}"} if $z = x^2+y^2${"altText":"z = x^2+y^2"} and $x = t^2${"altText":"x = t^2"} and $y= \\sin(t)${"altText":"y= \sin(t)"}.
   %[control:button:7fe6]{"position":[1,2]}
 syms x y
 f_func = x^2 + y^2; %[control:editfield:656f]{"position":[10,19]}
-%[text]Substituting first:
+%[text] Substituting first:
 syms t
 xt = t^2;             % Define x as a parameterized function of t %[control:editfield:01bc]{"position":[6,9]}
 yt = sin(t);             % Define y as a parameterized function of t %[control:editfield:9f9e]{"position":[6,12]}
@@ -245,7 +245,7 @@ z = subs(f_func,[x y],[xt yt]);        % Substitute the parameterizations into t
 displayFormula("f==z")                 % Display the results f(x,y) = z(t) %[output:8e567bf4]
 dzdt = diff(z,t);                      % Compute the derivative dz/dt
 displayFormula("diff(f,t)==dzdt")      % Display the results df/dt = dz/dt %[output:595ac84b]
-%[text]Then, try using the chain rule:
+%[text] Then, try using the chain rule:
 dxdt = diff(xt,t);                     % Compute dx/dt
 dydt = diff(yt,t);                     % Compute dy/dt
 
@@ -253,19 +253,19 @@ assume([x y],"real")                   % Tell the symbolic engine that we are wo
 gradf = gradient(f_func);              % Compute ∇f = [∂f/∂x ∂f/∂y]
 AltExpr = dot(gradf,[dxdt; dydt]);     % Compute the chain rule: df/dt = ∇f⋅[dx/dt dy/dt]
 displayFormula("dot(gradf,[dxdt; dydt]) == AltExpr") %[output:83c2a8ef]
-%[text]Plugging in the definitions of $x(t)${"altText":"x(t)"} and $y(t)${"altText":"y(t)"},
+%[text] Plugging in the definitions of $x(t)${"altText":"x(t)"} and $y(t)${"altText":"y(t)"},
 AfterSub = subs(AltExpr,[x y],[xt yt]);  % Substitute the parameterizations of x and y in terms of t
 displayFormula("diff(f,t) == AfterSub")  % Display the results of the calculation using the chain rule %[output:4a2e149d]
-%[text]In fact, the chain rule can be extended for any combination of functions with continuous derivatives, so if $f = g(x,y,z)${"altText":"f = g(x,y,z)"} has continuous partial derivatives $\\frac{\\partial g}{\\partial x}${"altText":"\frac{\partial g}{\partial x}"}, $\\frac{\\partial g}{\\partial y}${"altText":"\frac{\partial g}{\partial y}"}, and $\\frac{\\partial g}{\\partial z}${"altText":"\frac{\partial g}{\partial z}"} and $x(s,t)${"altText":"x(s,t)"}, $y(s,t)${"altText":"y(s,t)"}, and $z(s,t)${"altText":"z(s,t)"} are continuously differentiable functions of $s${"altText":"s"} and $t${"altText":"t"} then:
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial s} = \\frac{\\partial g}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial g}{\\partial y}\\frac{\\partial y}{\\partial s} + \\frac{\\partial g}{\\partial z}\\frac{\\partial z}{\\partial s}${"altText":"\frac{\partial f}{\partial s} = \frac{\partial g}{\partial x}\frac{\partial x}{\partial s} + \frac{\partial g}{\partial y}\frac{\partial y}{\partial s} + \frac{\partial g}{\partial z}\frac{\partial z}{\partial s}"},
-%[text]and
-%[text]{"align":"center"}$\\frac{\\partial f}{\\partial t} = \\frac{\\partial g}{\\partial x}\\frac{\\partial x}{\\partial t} + \\frac{\\partial g}{\\partial y}\\frac{\\partial y}{\\partial t} + \\frac{\\partial g}{\\partial z}\\frac{\\partial z}{\\partial t}${"altText":"\frac{\partial f}{\partial t} = \frac{\partial g}{\partial x}\frac{\partial x}{\partial t} + \frac{\partial g}{\partial y}\frac{\partial y}{\partial t} + \frac{\partial g}{\partial z}\frac{\partial z}{\partial t}"}.
+%[text] In fact, the chain rule can be extended for any combination of functions with continuous derivatives, so if $f = g(x,y,z)${"altText":"f = g(x,y,z)"} has continuous partial derivatives $\\frac{\\partial g}{\\partial x}${"altText":"\frac{\partial g}{\partial x}"}, $\\frac{\\partial g}{\\partial y}${"altText":"\frac{\partial g}{\partial y}"}, and $\\frac{\\partial g}{\\partial z}${"altText":"\frac{\partial g}{\partial z}"} and $x(s,t)${"altText":"x(s,t)"}, $y(s,t)${"altText":"y(s,t)"}, and $z(s,t)${"altText":"z(s,t)"} are continuously differentiable functions of $s${"altText":"s"} and $t${"altText":"t"} then:
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial s} = \\frac{\\partial g}{\\partial x}\\frac{\\partial x}{\\partial s} + \\frac{\\partial g}{\\partial y}\\frac{\\partial y}{\\partial s} + \\frac{\\partial g}{\\partial z}\\frac{\\partial z}{\\partial s}${"altText":"\frac{\partial f}{\partial s} = \frac{\partial g}{\partial x}\frac{\partial x}{\partial s} + \frac{\partial g}{\partial y}\frac{\partial y}{\partial s} + \frac{\partial g}{\partial z}\frac{\partial z}{\partial s}"},
+%[text] and
+%[text]{"align":"center"} $\\frac{\\partial f}{\\partial t} = \\frac{\\partial g}{\\partial x}\\frac{\\partial x}{\\partial t} + \\frac{\\partial g}{\\partial y}\\frac{\\partial y}{\\partial t} + \\frac{\\partial g}{\\partial z}\\frac{\\partial z}{\\partial t}${"altText":"\frac{\partial f}{\partial t} = \frac{\partial g}{\partial x}\frac{\partial x}{\partial t} + \frac{\partial g}{\partial y}\frac{\partial y}{\partial t} + \frac{\partial g}{\partial z}\frac{\partial z}{\partial t}"}.
 %%
-%[text]![Exercise icon](text:image:5b26) **Exercise 5.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
+%[text] ![Exercise icon](text:image:5b26) **Exercise 5.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
   %[control:button:8803]{"position":[1,2]}
 [myFun,myVars,myVarFuns] = GenerateExercise5(randi([1 2],[1 2])); %[output:9c515e50] %[output:27bc7126] %[output:31e368e5]
 %%
-%[text]Enter your solution in the [edit field](internal:M_4912).
+%[text] Enter your solution in the [edit field](internal:M_4912).
 syms s t x y %[text:anchor:M_27a8]
 g(x,y) = myFun;
 dgdx = diff(g,x);
@@ -281,7 +281,7 @@ dfdsSoln = dgdx*dxds + dgdy*dyds;
 dfdtSoln = dgdx*dxdt + dgdy*dydt;
 dfdsSoln = subs(dfdsSoln,[x y],myVarFuns) %[output:685956ce]
 dfdtSoln = subs(dfdtSoln,[x y],myVarFuns) %[output:0b4c6a28]
-%[text]
+%[text] 
 dfds = str2sym("0"); %[control:editfield:8b49]{"position":[16,19]} %[text:anchor:M_4912]
 dfdt = str2sym("0"); %[control:editfield:94ad]{"position":[16,19]}
 dfds = dfdsSoln;
@@ -290,12 +290,12 @@ dfdt = dfdtSoln;
 
 CheckEx5(dfds,dfdt,myFun,myVars,myVarFuns) %[output:791f0c1e] %[output:83e5dcd2]
 %%
-%[text]%[text:anchor:M_104d] ## ![World icon](text:image:05b2)Application to Gradient Descent
-%[text]A common optimization algorithm is gradient descent, in which we minimize a loss function $L${"altText":"L"} by following the path suggested by the gradient toward a minimum. In the 1D case, this is a simple calculus problem that we can plot and observe. Consider the loss function
-%[text]{"align":"center"}$L(w)=(w-3)^2${"altText":"L(w)=(w-3)^2"}.
-%[text]We know that this function is minimized at the base of the parabola, when $w=3${"altText":"w=3"}. Let's watch how this is calculated using gradient descent, starting from an initial guess $w\_0${"altText":"w\_0"}. The gradient descent update is calculated by moving our proposed solution in the direction of a scalar multiple of the gradient of the loss function.
-%[text]{"align":"center"}$w\_{k+1} = w\_k - \\alpha \\nabla L(w\_k)${"altText":"w\_{k+1} = w\_k - \alpha \nabla L(w\_k)"}
-%[text]The positive scalar value $\\alpha${"altText":"\alpha"} is called the learning rate. Because the gradient points in the direction of steepest *increase*, for gradient descent, we will move in the negative gradient direction for the steepest *decrease*.
+%[text] %[text:anchor:M_104d] ## ![World icon](text:image:05b2)Application to Gradient Descent
+%[text] A common optimization algorithm is gradient descent, in which we minimize a loss function $L${"altText":"L"} by following the path suggested by the gradient toward a minimum. In the 1D case, this is a simple calculus problem that we can plot and observe. Consider the loss function
+%[text]{"align":"center"} $L(w)=(w-3)^2${"altText":"L(w)=(w-3)^2"}.
+%[text] We know that this function is minimized at the base of the parabola, when $w=3${"altText":"w=3"}. Let's watch how this is calculated using gradient descent, starting from an initial guess $w\_0${"altText":"w\_0"}. The gradient descent update is calculated by moving our proposed solution in the direction of a scalar multiple of the gradient of the loss function.
+%[text]{"align":"center"} $w\_{k+1} = w\_k - \\alpha \\nabla L(w\_k)${"altText":"w\_{k+1} = w\_k - \alpha \nabla L(w\_k)"}
+%[text] The positive scalar value $\\alpha${"altText":"\alpha"} is called the learning rate. Because the gradient points in the direction of steepest *increase*, for gradient descent, we will move in the negative gradient direction for the steepest *decrease*.
 syms w
 L = (w-3)^2;
 alpha = 0.2; %[control:spinner:9216]{"position":[9,12]}
@@ -303,10 +303,10 @@ w0 = -3; %[control:editfield:0e9c]{"position":[6,8]}
 n = 30; %[control:spinner:2c73]{"position":[5,7]}
   %[control:button:545d]{"position":[1,2]}
 Visualize1DGradientDescent(L,alpha,w0,n) %[output:3bd69ecc] %[output:98d4fef6] %[output:2ef42645] %[output:03f576b4] %[output:5b12b08e]
-%[text]See code for [`Visualize1DGradientDescent`](internal:M_815d).
+%[text] See code for [`Visualize1DGradientDescent`](internal:M_815d).
 %%
-%[text]%[text:anchor:M_93cd] ### 2D Example
-%[text]While the method becomes harder to visualize, the same approach works in higher dimensions! Imagine you are designing a smart Heating, Ventilation, and Air Conditioning (HVAC) control system. Your goal is to minimize the total energy consumption while maintaining occupant comfort. Let's define parameters where $w\_1${"altText":"w\_1"} is the airflow rate of the system and $w\_2${"altText":"w\_2"} measures the cooling power. Then we could define a loss function $L(w\_1,w\_2) = (w\_1-3)^2+(w\_2-2)^2+0.5w\_1w\_2${"altText":"L(w\_1,w\_2) = (w\_1-3)^2+(w\_2-2)^2+0.5w\_1w\_2"} with quadratic penalties to model efficiency losses and the coupling between variables to track interactions. This is still simple enough to identify the solution visually or analytically:
+%[text] %[text:anchor:M_93cd] ### 2D Example
+%[text] While the method becomes harder to visualize, the same approach works in higher dimensions! Imagine you are designing a smart Heating, Ventilation, and Air Conditioning (HVAC) control system. Your goal is to minimize the total energy consumption while maintaining occupant comfort. Let's define parameters where $w\_1${"altText":"w\_1"} is the airflow rate of the system and $w\_2${"altText":"w\_2"} measures the cooling power. Then we could define a loss function $L(w\_1,w\_2) = (w\_1-3)^2+(w\_2-2)^2+0.5w\_1w\_2${"altText":"L(w\_1,w\_2) = (w\_1-3)^2+(w\_2-2)^2+0.5w\_1w\_2"} with quadratic penalties to model efficiency losses and the coupling between variables to track interactions. This is still simple enough to identify the solution visually or analytically:
 syms w1 w2
 L = (w1-3)^2 + (w2-2)^2 + 0.5*w1*w2^2; %[control:editfield:2539]{"position":[5,38]}
 gradL = gradient(L,[w1 w2]);
@@ -315,31 +315,31 @@ w0 = [-3,-3]; %[control:editfield:720b]{"position":[7,9]} %[control:editfield:00
 n = 50; %[control:spinner:46e6]{"position":[5,7]}
   %[control:button:3007]{"position":[1,2]}
 PlotGradientDescent(L,gradL,alpha,w0,n) %[output:8c946f05]
-%[text]See code for [PlotGradientDescent](internal:M_1c05).
-%[text]![Try icon](text:image:3f7a) **Try**.
-%[text]1. Change the value of $\\alpha${"altText":"\alpha"} and observe how the convergence changes. What happens at $\\alpha = 0.01${"altText":"\alpha = 0.01"}? What about at $\\alpha = 0.75${"altText":"\alpha = 0.75"}?
-%[text]2. Change the initial guess and observe how the convergence changes.
-%[text]3. Change the value of $n${"altText":"n"} and observe how the convergence changes.
-%[text]4. Change the loss function, say to $L = (w\_1-3)^2 + (w\_2-2)^2 + 0.5w\_1w\_2^2${"altText":"L = (w\_1-3)^2 + (w\_2-2)^2 + 0.5w\_1w\_2^2"}, and observe how both the surface and the convergence change. \
-%[text]![Reflect icon](text:image:1fb9) **Reflect**. How can gradient descent fail?
+%[text] See code for [PlotGradientDescent](internal:M_1c05).
+%[text] ![Try icon](text:image:3f7a) **Try**.
+%[text] 1. Change the value of $\\alpha${"altText":"\alpha"} and observe how the convergence changes. What happens at $\\alpha = 0.01${"altText":"\alpha = 0.01"}? What about at $\\alpha = 0.75${"altText":"\alpha = 0.75"}?
+%[text] 2. Change the initial guess and observe how the convergence changes.
+%[text] 3. Change the value of $n${"altText":"n"} and observe how the convergence changes.
+%[text] 4. Change the loss function, say to $L = (w\_1-3)^2 + (w\_2-2)^2 + 0.5w\_1w\_2^2${"altText":"L = (w\_1-3)^2 + (w\_2-2)^2 + 0.5w\_1w\_2^2"}, and observe how both the surface and the convergence change. \
+%[text] ![Reflect icon](text:image:1fb9) **Reflect**. How can gradient descent fail?
 %%
-%[text]%[text:anchor:M_2b44] ### ![World icon](text:image:6120)**Edge Detection (Computer Vision)**
-%[text]A grayscale image is a matrix of intensity values. We can interpret this as a function $f${"altText":"f"} that maps the pixel location $(x,y)${"altText":"(x,y)"} to an intensity value $z${"altText":"z"}. In this case, the gradient vector of such a 2D image represents the direction and rate of the most rapid intensity change at each pixel. It is composed of two components:
-%[text]1. The partial derivative in the x-direction, $\\displaystyle \\left(\\frac{\\partial f}{\\partial x}\\right)\n\n\n\n\n\n${"altText":"Partial derivative of f with respect to x."}, which measures the change in intensity along the horizontal axis.
-%[text]2. The partial derivative in the y-direction, $\\displaystyle \\left(\\frac{\\partial f}{\\partial y}\\right)\n\n\n\n\n\n${"altText":"Partial derivative of f with respect to y."}, which measures the change in intensity along the vertical axis. \
+%[text] %[text:anchor:M_2b44] ### ![World icon](text:image:6120)**Edge Detection (Computer Vision)**
+%[text] A grayscale image is a matrix of intensity values. We can interpret this as a function $f${"altText":"f"} that maps the pixel location $(x,y)${"altText":"(x,y)"} to an intensity value $z${"altText":"z"}. In this case, the gradient vector of such a 2D image represents the direction and rate of the most rapid intensity change at each pixel. It is composed of two components:
+%[text] 1. The partial derivative in the x-direction, $\\displaystyle \\left(\\frac{\\partial f}{\\partial x}\\right)\n\n\n\n\n\n${"altText":"Partial derivative of f with respect to x."}, which measures the change in intensity along the horizontal axis.
+%[text] 2. The partial derivative in the y-direction, $\\displaystyle \\left(\\frac{\\partial f}{\\partial y}\\right)\n\n\n\n\n\n${"altText":"Partial derivative of f with respect to y."}, which measures the change in intensity along the vertical axis. \
   %[control:button:09e5]{"position":[1,2]}
 I = peaks(200);
 [Ix,Iy] = gradient(I);     % Calculate the numerical gradients
 PlotIAsImage(I,Ix,Iy) %[output:5abd0c57]
 clf                        % Reset the tiledlayout from PlotAsImage %[output:4adc9596]
-%[text]See code for [`PlotIAsImage`](internal:M_1da3).
-%[text]If a function is reinterpreted as an image, and remembering that high values appear light while low values appear dark, this looks very similar.
+%[text] See code for [`PlotIAsImage`](internal:M_1da3).
+%[text] If a function is reinterpreted as an image, and remembering that high values appear light while low values appear dark, this looks very similar.
 imshowpair(sqrt(Ix.^2 + Iy.^2),I,"montage") %[output:4adc9596]
 ax = gca;
 ax.PositionConstraint = "outerposition"; %[output:4adc9596]
 title("magnitude of the gradient                    original image        ") %[output:4adc9596]
 %%
-%[text]The magnitude of the gradient is large where the pixel values are changing rapidly and small when the pixel values are consistent in an area. In the image below, you will see the gradient vector plotted. Notice the impact of gradient changes in the x and y-direction on the images. For more details, see the [Computer Vision Basics](https://www.mathworks.com/matlabcentral/fileexchange/180661-computer-vision-basics) courseware.
+%[text] The magnitude of the gradient is large where the pixel values are changing rapidly and small when the pixel values are consistent in an area. In the image below, you will see the gradient vector plotted. Notice the impact of gradient changes in the x and y-direction on the images. For more details, see the [Computer Vision Basics](https://www.mathworks.com/matlabcentral/fileexchange/180661-computer-vision-basics) courseware.
 %[text:table]
 %[text] | **If the gradient is...** | <p align="center">**The intensity changes in** </p> | <p align="center">**Visualization**</p> |
 %[text] | --- | --- | --- |
@@ -348,17 +348,17 @@ title("magnitude of the gradient                    original image        ") %[o
 %[text] | <p align="center"></p><p align="center">$\\nabla f = \\left\[ 0 , \\frac{\\partial f}{\\partial y} \\right\]\n${"altText":"Gradient of f with zero for x and partial derivative with respect to y."}</p> | <p align="center"></p><p align="center"></p><p align="center">only in y</p> | ![Image of a gradient moving from top to bottom. There is an arrow indicating the direction of the gradient.](text:image:43cb) |
 %[text:table]
 %%
-%[text]%[text:anchor:M_90c0] The edge strength is given by the magnitude of the gradient vector. A larger gradient magnitude signifies a steeper change at the edge, while a smaller magnitude suggests a more gradual change.
-%[text]{"align":"center"}%[text:anchor:M_6d62] $\\text{edge strength}  = |\\nabla f| = \\sqrt{\\left( \\frac{\\partial f}{\\partial x} \\right)^2 + \\left( \\frac{\\partial f}{\\partial y} \\right)^2}\n${"altText":"Edge strength is equal to the magnitude of the gradient of f, calculated as the square root of the sum of the squares of the partial derivatives with respect to x and y."}
-%[text]%[text:anchor:M_0639] The edge direction is defined as being perpendicular to the gradient vector. Since the gradient points in the direction of the steepest intensity change, this means the edge follows the least intensity change.
-%[text]{"align":"center"}$\\text{edge direction}=\\theta = \\texttt{atan2} \\left(\\frac{\\partial f}{\\partial y},\\frac{\\partial f}{\\partial x} \\right)\n${"altText":"Edge direction is equal to the angle \theta, calculated as atan2(f\_y, f\_x)"}
+%[text] %[text:anchor:M_90c0] The edge strength is given by the magnitude of the gradient vector. A larger gradient magnitude signifies a steeper change at the edge, while a smaller magnitude suggests a more gradual change.
+%[text]{"align":"center"} %[text:anchor:M_6d62] $\\text{edge strength}  = |\\nabla f| = \\sqrt{\\left( \\frac{\\partial f}{\\partial x} \\right)^2 + \\left( \\frac{\\partial f}{\\partial y} \\right)^2}\n${"altText":"Edge strength is equal to the magnitude of the gradient of f, calculated as the square root of the sum of the squares of the partial derivatives with respect to x and y."}
+%[text] %[text:anchor:M_0639] The edge direction is defined as being perpendicular to the gradient vector. Since the gradient points in the direction of the steepest intensity change, this means the edge follows the least intensity change.
+%[text]{"align":"center"} $\\text{edge direction}=\\theta = \\texttt{atan2} \\left(\\frac{\\partial f}{\\partial y},\\frac{\\partial f}{\\partial x} \\right)\n${"altText":"Edge direction is equal to the angle \theta, calculated as atan2(f\_y, f\_x)"}
 %%
-%[text]%[text:anchor:M_4f76] ![Try icon](text:image:35d9) **Try**. Compare the [edge strength](internal:M_6d62) for two types of edges: a step edge and a ramp edge. For details on various edge types, see the [Computer Vision Basics](https://www.mathworks.com/matlabcentral/fileexchange/180661-computer-vision-basics) courseware.
-%[text]1. Click **Start interaction**
-%[text]2. Use your mouse to draw a horizontal line across the white to black regions of the first image.
-%[text]3. Use your mouse to draw a horizontal line across the white to black regions of the second image.
-%[text]4. Then compare the edge strengths computed for each of your lines.
-%[text]5. Repeat with longer or shorter lines, if desired. \
+%[text] %[text:anchor:M_4f76] ![Try icon](text:image:35d9) **Try**. Compare the [edge strength](internal:M_6d62) for two types of edges: a step edge and a ramp edge. For details on various edge types, see the [Computer Vision Basics](https://www.mathworks.com/matlabcentral/fileexchange/180661-computer-vision-basics) courseware.
+%[text] 1. Click **Start interaction**
+%[text] 2. Use your mouse to draw a horizontal line across the white to black regions of the first image.
+%[text] 3. Use your mouse to draw a horizontal line across the white to black regions of the second image.
+%[text] 4. Then compare the edge strengths computed for each of your lines.
+%[text] 5. Repeat with longer or shorter lines, if desired. \
   %[control:button:876f]{"position":[1,2]}
 [RampPosition,RampImage,~] = GetPosition("Ramp.jpg"); %#ok<*ASGLU>
 [StepPosition,StepImage,~] = GetPosition("Step.jpg"); %#ok<*ASGLU>
@@ -368,12 +368,12 @@ hold on %[output:38e988e0]
 [StepMag,~] = DrawGrad(StepImage,StepPosition,[330 0],"Static",330); %[output:38e988e0]
 title("The ramp edge strength is "+round(RampMag) + ",  and the step edge strength is " + round(StepMag)) %[output:38e988e0]
 hold off %[output:38e988e0]
-%[text]See code for [`GetPosition`](file:../../FunctionLibrary/GetPosition.m) or [`DrawGrad`](internal:M_5542).
+%[text] See code for [`GetPosition`](file:../../FunctionLibrary/GetPosition.m) or [`DrawGrad`](internal:M_5542).
 %%
-%[text]![Reflect icon](text:image:4c13) **Reflect**. The gradient vector points in the direction of the fastest increase in intensity. How does the gradient relate to the direction of the edge?
+%[text] ![Reflect icon](text:image:4c13) **Reflect**. The gradient vector points in the direction of the fastest increase in intensity. How does the gradient relate to the direction of the edge?
 %%
-%[text]%[text:anchor:M_5767] ![World icon](text:image:850c) **Medical Imaging Application.** In medical imaging, some diseases are suspected when clear edges are not visible. In such cases, a weak edge might indicate disease, while a strong edge suggests health. Remember, the stronger the edge, the higher the likelihood of clear edge detection. Compare the edge strength in the two lung images below. One image shows healthy lungs, while the other image shows diseased lungs.
-%[text]![Instructor icon](text:image:4c32) **Demonstration**. Calculate the edge strengths for each of the lung images.
+%[text] %[text:anchor:M_5767] ![World icon](text:image:850c) **Medical Imaging Application.** In medical imaging, some diseases are suspected when clear edges are not visible. In such cases, a weak edge might indicate disease, while a strong edge suggests health. Remember, the stronger the edge, the higher the likelihood of clear edge detection. Compare the edge strength in the two lung images below. One image shows healthy lungs, while the other image shows diseased lungs.
+%[text] ![Instructor icon](text:image:4c32) **Demonstration**. Calculate the edge strengths for each of the lung images.
   %[control:button:71da]{"position":[1,2]}
 I = imread("LungA.jpg"); disp(("Image Source: Mikael Häggström, M.D."+newline+"CC0, via Wikimedia Commons"+newline+sprintf('<a href="https://commons.wikimedia.org/wiki/File:Normal_posteroanterior_(PA)_chest_radiograph_(X-ray).jpg">X-Ray of Chest</a>')))  % Include citation in the drop-down code %[control:dropdown:50ca]{"position":[5,254]} %[output:2f49c490]
 AdjustRanges = true; %[control:checkbox:587a]{"position":[16,20]}
@@ -386,36 +386,36 @@ end
 EdgeStrength = sqrt(Ix.^2+Iy.^2);
 
 PlotXrayImages(I,Islice,EdgeStrength,nx,ny) %[output:9107ccbc]
-%[text]See code for [`PlotXrayImages`](internal:M_7e8d).
+%[text] See code for [`PlotXrayImages`](internal:M_7e8d).
 %%
-%[text]## **Higher‑Order Partial Derivatives**
-%[text]When the function, $f(x,y)${"altText":"f(x,y)"}, is sufficiently smooth, partial derivatives can be differentiated again with respect to any relevant variable. From
-%[text]{"align":"center"}$f\_x = \\frac{\\partial f}{\\partial x}${"altText":"f\_x = \frac{\partial f}{\partial x}"} and $f\_y = \\frac{\\partial f}{\\partial y}${"altText":"f\_y = \frac{\partial f}{\partial y}"}
-%[text]we can compute the second-order derivatives
-%[text]{"align":"center"}$f\_{xx} = \\frac{\\partial^2 f}{\\partial x^2}${"altText":"f\_{xx} = \frac{\partial^2 f}{\partial x^2}"}, $f\_{yy} = \\frac{\\partial^2 f}{\\partial y^2}${"altText":"f\_{yy} = \frac{\partial^2 f}{\partial y^2}"}, $f\_{xy} = \\frac{\\partial}{\\partial y}\\left(\\frac{\\partial f}{\\partial x}\\right)${"altText":"f\_{xy} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial x}\right)"}, and $f\_{yx} = \\frac{\\partial}{\\partial x}\\left(\\frac{\\partial f}{\\partial y}\\right)${"altText":"f\_{yx} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial y}\right)"},
-%[text]or even more.
-%[text]### **Equality of Mixed Partial Derivatives**
-%[text]**Clairaut's Theorem (Schwartz's Theorem):** Let $f(x,y)${"altText":"f(x,y)"} be a function whose second-order partial derivatives exist and are continuous in a neighborhood of a point $(a,b)${"altText":"(a,b)"}. Then the mixed partial derivatives are equal at that point:
-%[text]{"align":"center"}$\\frac{\\partial^2 f}{\\partial x \\partial y}(a,b) = \\frac{\\partial^2 f}{\\partial y \\partial x}(a,b)${"altText":"\frac{\partial^2 f}{\partial x \partial y}(a,b) = \frac{\partial^2 f}{\partial y \partial x}(a,b)"}.
-%[text]Informally, if the mixed partial derivatives are continuous over their domain, then the order in which you compute them doesn't matter, and you will get the same result with:
-%[text]{"align":"center"}$f\_{xy} = f\_{yx}${"altText":"f\_{xy} = f\_{yx}"}.
-%[text]Intuitively, when you compute a mixed partial derivative, you are asking:
-%[text]- “How does the rate of change in $x${"altText":"x"} change as $y${"altText":"y"} changes?” \
-%[text]vs.
-%[text]- “How does the rate of change in $y${"altText":"y"} change as $x${"altText":"x"} changes?” \
-%[text]Clairaut’s Theorem says that under reasonable smoothness conditions, these two viewpoints lead to the same result. Smoothness (continuity of second partials) rules out sharp corners or pathological behavior that could make the order matter.
-%[text]**Example**
-%[text]{"align":"center"}$f(x,y)=x^2y^3${"altText":"f(x,y)=x^2y^3"}
-%[text]{"align":"center"}$f\_x=2xy^3${"altText":"f\_x=2xy^3"} $\\longrightarrow${"altText":"\longrightarrow"} $f\_{xy}=6xy^2${"altText":"f\_{xy}=6xy^2"},
-%[text]while
-%[text]{"align":"center"}$f\_y=3x^2y^2${"altText":"f\_y=3x^2y^2"} $\\longrightarrow${"altText":"\longrightarrow"} $f\_{yx}=6xy^2${"altText":"f\_{yx}=6xy^2"}.
-%[text]In this case, it doesn't matter which order mixed partials are calculated in because the result is the same.
-%[text]%[text:anchor:M_01d6] **Counterexample**
-%[text]{"align":"center"}$f(x,y) = \\cases{\\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \\neq (0,0) \\cr 0, & (x,y) = (0,0)}${"altText":"f(x,y) = \cases{\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \neq (0,0) \cr 0, & (x,y) = (0,0)}"}
-%[text]In this case, by definition
-%[text]{"align":"center"}$f\_x(0,0) = \\lim\_{h \\to 0} \\frac{f(h,0)-f(0,0)}{h} = \\lim\_{h\\to 0} \\frac{0}{h} = 0,${"altText":"f\_x(0,0) = \lim\_{h \to 0} \frac{f(h,0)-f(0,0)}{h} = \lim\_{h\to 0} \frac{0}{h} = 0,"} and
-%[text]{"align":"center"}$f\_y(0,0) = \\lim\_{k \\to 0} \\frac{f(0,k)-f(0,0)}{k} = \\lim\_{k\\to 0} \\frac{0}{k} = 0${"altText":"f\_y(0,0) = \lim\_{k \to 0} \frac{f(0,k)-f(0,0)}{k} = \lim\_{k\to 0} \frac{0}{k} = 0"}.
-%[text]Thus, both partial derivatives exist at $(0,0)${"altText":"(0,0)"}. However, for all points $(x,y)${"altText":"(x,y)"} that are NOT the origin,
+%[text] ## **Higher‑Order Partial Derivatives**
+%[text] When the function, $f(x,y)${"altText":"f(x,y)"}, is sufficiently smooth, partial derivatives can be differentiated again with respect to any relevant variable. From
+%[text]{"align":"center"} $f\_x = \\frac{\\partial f}{\\partial x}${"altText":"f\_x = \frac{\partial f}{\partial x}"} and $f\_y = \\frac{\\partial f}{\\partial y}${"altText":"f\_y = \frac{\partial f}{\partial y}"}
+%[text] we can compute the second-order derivatives
+%[text]{"align":"center"} $f\_{xx} = \\frac{\\partial^2 f}{\\partial x^2}${"altText":"f\_{xx} = \frac{\partial^2 f}{\partial x^2}"}, $f\_{yy} = \\frac{\\partial^2 f}{\\partial y^2}${"altText":"f\_{yy} = \frac{\partial^2 f}{\partial y^2}"}, $f\_{xy} = \\frac{\\partial}{\\partial y}\\left(\\frac{\\partial f}{\\partial x}\\right)${"altText":"f\_{xy} = \frac{\partial}{\partial y}\left(\frac{\partial f}{\partial x}\right)"}, and $f\_{yx} = \\frac{\\partial}{\\partial x}\\left(\\frac{\\partial f}{\\partial y}\\right)${"altText":"f\_{yx} = \frac{\partial}{\partial x}\left(\frac{\partial f}{\partial y}\right)"},
+%[text] or even more.
+%[text] ### **Equality of Mixed Partial Derivatives**
+%[text] **Clairaut's Theorem (Schwartz's Theorem):** Let $f(x,y)${"altText":"f(x,y)"} be a function whose second-order partial derivatives exist and are continuous in a neighborhood of a point $(a,b)${"altText":"(a,b)"}. Then the mixed partial derivatives are equal at that point:
+%[text]{"align":"center"} $\\frac{\\partial^2 f}{\\partial x \\partial y}(a,b) = \\frac{\\partial^2 f}{\\partial y \\partial x}(a,b)${"altText":"\frac{\partial^2 f}{\partial x \partial y}(a,b) = \frac{\partial^2 f}{\partial y \partial x}(a,b)"}.
+%[text] Informally, if the mixed partial derivatives are continuous over their domain, then the order in which you compute them doesn't matter, and you will get the same result with:
+%[text]{"align":"center"} $f\_{xy} = f\_{yx}${"altText":"f\_{xy} = f\_{yx}"}.
+%[text] Intuitively, when you compute a mixed partial derivative, you are asking:
+%[text] - “How does the rate of change in $x${"altText":"x"} change as $y${"altText":"y"} changes?” \
+%[text] vs.
+%[text] - “How does the rate of change in $y${"altText":"y"} change as $x${"altText":"x"} changes?” \
+%[text] Clairaut’s Theorem says that under reasonable smoothness conditions, these two viewpoints lead to the same result. Smoothness (continuity of second partials) rules out sharp corners or pathological behavior that could make the order matter.
+%[text] **Example**
+%[text]{"align":"center"} $f(x,y)=x^2y^3${"altText":"f(x,y)=x^2y^3"}
+%[text]{"align":"center"} $f\_x=2xy^3${"altText":"f\_x=2xy^3"} $\\longrightarrow${"altText":"\longrightarrow"} $f\_{xy}=6xy^2${"altText":"f\_{xy}=6xy^2"},
+%[text] while
+%[text]{"align":"center"} $f\_y=3x^2y^2${"altText":"f\_y=3x^2y^2"} $\\longrightarrow${"altText":"\longrightarrow"} $f\_{yx}=6xy^2${"altText":"f\_{yx}=6xy^2"}.
+%[text] In this case, it doesn't matter which order mixed partials are calculated in because the result is the same.
+%[text] %[text:anchor:M_01d6] **Counterexample**
+%[text]{"align":"center"} $f(x,y) = \\cases{\\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \\neq (0,0) \\cr 0, & (x,y) = (0,0)}${"altText":"f(x,y) = \cases{\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \neq (0,0) \cr 0, & (x,y) = (0,0)}"}
+%[text] In this case, by definition
+%[text]{"align":"center"} $f\_x(0,0) = \\lim\_{h \\to 0} \\frac{f(h,0)-f(0,0)}{h} = \\lim\_{h\\to 0} \\frac{0}{h} = 0,${"altText":"f\_x(0,0) = \lim\_{h \to 0} \frac{f(h,0)-f(0,0)}{h} = \lim\_{h\to 0} \frac{0}{h} = 0,"} and
+%[text]{"align":"center"} $f\_y(0,0) = \\lim\_{k \\to 0} \\frac{f(0,k)-f(0,0)}{k} = \\lim\_{k\\to 0} \\frac{0}{k} = 0${"altText":"f\_y(0,0) = \lim\_{k \to 0} \frac{f(0,k)-f(0,0)}{k} = \lim\_{k\to 0} \frac{0}{k} = 0"}.
+%[text] Thus, both partial derivatives exist at $(0,0)${"altText":"(0,0)"}. However, for all points $(x,y)${"altText":"(x,y)"} that are NOT the origin,
   %[control:button:390d]{"position":[1,2]} %[text:anchor:M_325d]
 % Perform this computation symbolically under the assumptions that (x,y) is
 % not the origin and that both h and k are nonzero values that could be
@@ -433,12 +433,12 @@ Z = (X.*Y.*(X.^2-Y.^2))./(X.^2+Y.^2);
 Z(isnan(Z)) = 0;
 figure %[output:683f35c4]
 surf(X,Y,Z,EdgeColor="none") %[output:683f35c4]
-%[text]%[text:anchor:M_436c] See complete step-by-step computation in the [appendix](internal:M_5216).
-%[text]%[text:anchor:TMP_457c] ![Exercise icon](text:image:279a) **Exercise 6.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
+%[text] %[text:anchor:M_436c] See complete step-by-step computation in the [appendix](internal:M_5216).
+%[text] %[text:anchor:TMP_457c] ![Exercise icon](text:image:279a) **Exercise 6.** The "Generate a Problem" button can be used repeatedly to create additional randomized practice problems. Generate as many variations as you would like to strengthen your understanding and build your problem-solving fluency.
   %[control:button:5801]{"position":[1,2]}
 [myFun,myDerVars] = GenerateExercise6(2,randi([2 3],1)); %[output:7380e58b]
 %%
-%[text]Enter your solution in the [edit field](internal:M_4256).
+%[text] Enter your solution in the [edit field](internal:M_4256).
 mySoln = str2sym("w"); %[control:editfield:9590]{"position":[18,21]} %[text:anchor:M_4256]
   %[control:button:509f]{"position":[1,2]}
 syms x y z w t
@@ -450,41 +450,41 @@ else
 end %[output:group:57423813]
 CheckEx6(myFun,myDerVars,mySoln) %[output:7de1b04e] %[output:8b8f1ea1]
 %%
-%[text]## **Connections to Other Topics**
-%[text]- [Multivariable: Space and Functions](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions) is available on [![File Exchange badge](text:image:5341)](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions) or [![Open in MATLAB Online Button](text:image:5012)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Multivariable-Space-and-Functions&project=Space.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Multivariable-Space-and-Functions)
-%[text]- [Multivariable Calculus: Integrals](https://www.mathworks.com/matlabcentral/fileexchange/181588-multivariable-integrals) is available on [![File Exchange badge](text:image:82f9)](https://www.mathworks.com/matlabcentral/fileexchange/181588-multivariable-integrals) or [![Open in MATLAB Online Button](text:image:120c)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Multivariable-Integrals&project=Integrals.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Multivariable-Integrals)
-%[text]- [Applied Partial Differential Equations](https://www.mathworks.com/matlabcentral/fileexchange/172650-applied-partial-differential-equations) is available on [![File Exchange badge](text:image:6ce5)](https://www.mathworks.com/matlabcentral/fileexchange/172650-applied-partial-differential-equations) or [![Open in MATLAB Online Button](text:image:31d6)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Applied-PDEs&project=AppliedPDEs.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Applied-PDEs) \
-%[text]## Further Resources
-%[text]- [Optimization Onramp](https://matlabacademy.mathworks.com/details/optimization-onramp/optim)
-%[text]- [Introduction to Symbolic Math with MATLAB](https://matlabacademy.mathworks.com/details/introduction-to-symbolic-math-with-matlab/symbolic) \
-%[text]%[text:anchor:TMP_73e1] [⇦ Main Menu](file:../../MainMenu.m)
-%[text]## Appendix
-%[text]%[text:anchor:M_5216] ### Computation details for mixed-partials counterexample
-%[text][Return to script](internal:M_01d6)
-%[text]{"align":"center"}$f(x,y) = \\cases{\\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \\neq (0,0) \\cr 0, & (x,y) = (0,0)}${"altText":"f(x,y) = \cases{\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \neq (0,0) \cr 0, & (x,y) = (0,0)}"}
-%[text]In this case, by definition
-%[text]{"align":"center"}$f\_x(0,0) = \\lim\_{h \\to 0} \\frac{f(h,0)-f(0,0)}{h} = \\lim\_{h\\to 0} \\frac{0}{h} = 0,${"altText":"f\_x(0,0) = \lim\_{h \to 0} \frac{f(h,0)-f(0,0)}{h} = \lim\_{h\to 0} \frac{0}{h} = 0,"} and
-%[text]{"align":"center"}$f\_y(0,0) = \\lim\_{k \\to 0} \\frac{f(0,k)-f(0,0)}{k} = \\lim\_{k\\to 0} \\frac{0}{k} = 0${"altText":"f\_y(0,0) = \lim\_{k \to 0} \frac{f(0,k)-f(0,0)}{k} = \lim\_{k\to 0} \frac{0}{k} = 0"}.
-%[text]Thus, both partial derivatives exist at $(0,0)${"altText":"(0,0)"}. However, for all points $(x,y)${"altText":"(x,y)"} that are NOT the origin,
-%[text]{"align":"center"}$f\_x(x,y) = \\frac{2\\,x^2\\,y}{x^2+y^2}+\\frac{y\\,\\left(x^2-y^2\\right)}{x^2+y^2}-\\frac{2\\,x^2\\,y\\,\\left(x^2-y^2\\right)}{{\\left(x^2+y^2\\right)}^2} = \\frac{y\\,\\left(x^4+4\\,x^2\\,y^2-y^4\\right)}{{\\left(x^2+y^2\\right)}^2}${"altText":"f\_x(x,y) = \frac{2x^2y}{x^2+y^2}+\frac{y\left(x^2-y^2\right)}{x^2+y^2}-\frac{2x^2y\left(x^2-y^2\right)}{{\left(x^2+y^2\right)}^2} = \frac{y\left(x^4+4x^2y^2-y^4\right)}{{\left(x^2+y^2\right)}^2}"},
-%[text]So
-%[text]{"align":"center"}$\\matrix{f\_{xy}(0,0) &=& \\lim\_{k \\to 0} \\frac{f\_x(0,k)-f\_x(0,0)}{k} \\cr &= &\\lim\_{k\\to 0} \\frac{-k^5/k^4-0}{k} \\cr &=& \\lim\_{k\\to 0} \\frac{-k^5}{k^5} \\cr &=& -1}${"altText":"f\_{xy}(0,0) = \lim\_{k \to 0} \frac{f\_x(0,k)-f\_x(0,0)}{k} = \lim\_{k\to 0} \frac{-k^5\/k^4-0}{k} = \lim\_{k\to 0} \frac{-k^5}{k^5} = -1"}.
-%[text]On the other hand,
-%[text]{"align":"center"}$f\_y(x,y) = \\frac{x\\,\\left(x^2-y^2\\right)}{x^2+y^2}-\\frac{2\\,x\\,y^2}{x^2+y^2}-\\frac{2\\,x\\,y^2\\,\\left(x^2-y^2\\right)}{{\\left(x^2+y^2\\right)}^2} = -\\frac{x\\,\\left(-x^4+4\\,x^2\\,y^2+y^4\\right)}{{\\left(x^2+y^2\\right)}^2}${"altText":"f\_y(x,y) = \frac{x\left(x^2-y^2\right)}{x^2+y^2}-\frac{2xy^2}{x^2+y^2}-\frac{2xy^2\left(x^2-y^2\right)}{{\left(x^2+y^2\right)}^2} = -\frac{x\left(-x^4+4x^2y^2+y^4\right)}{{\left(x^2+y^2\right)}^2}"},
-%[text]so
-%[text]{"align":"center"}$\\matrix{f\_{yx} &=& \\lim\_{h\\to 0} \\frac{f\_y(h,0)-f\_y(0,0)}{h} \\cr & = &  \\lim\_{h\\to 0} \\frac{h^5/h^4-0}{h}\\cr & = & \\lim\_{h\\to 0} \\frac{h^5}{h^5} \\cr &=& 1}${"altText":"f\_{yx} = \lim\_{h\to 0} \frac{f\_y(h,0)-f\_y(0,0)}{h} = \lim\_{h\to 0} \frac{h^5\/h^4-0}{h} = \lim\_{h\to 0} \frac{h^5}{h^5} = 1"}.
-%[text][Return to script](internal:M_01d6)
-%[text][⇦ Main Menu](file:../../MainMenu.m)
-%[text]%[text:anchor:H_0AAABA39] ## Local Helper Functions
-%[text]If you want to see the details of the code, select the **View** tab and switch to **Output Inline**. Alternatively, select **Output Inline** using the icon ![live script output inline icon](text:image:9701) at the top right of the Live Editor pane.
-%[text]`GenerateExercise1` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing partial derivatives. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, $w${"altText":"w"}, and $t${"altText":"t"}.
+%[text] ## **Connections to Other Topics**
+%[text] - [Multivariable: Space and Functions](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions) is available on [![File Exchange badge](text:image:5341)](https://www.mathworks.com/matlabcentral/fileexchange/180356-multivariable-space-and-functions) or [![Open in MATLAB Online Button](text:image:5012)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Multivariable-Space-and-Functions&project=Space.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Multivariable-Space-and-Functions)
+%[text] - [Multivariable Calculus: Integrals](https://www.mathworks.com/matlabcentral/fileexchange/181588-multivariable-integrals) is available on [![File Exchange badge](text:image:82f9)](https://www.mathworks.com/matlabcentral/fileexchange/181588-multivariable-integrals) or [![Open in MATLAB Online Button](text:image:120c)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Multivariable-Integrals&project=Integrals.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Multivariable-Integrals)
+%[text] - [Applied Partial Differential Equations](https://www.mathworks.com/matlabcentral/fileexchange/172650-applied-partial-differential-equations) is available on [![File Exchange badge](text:image:6ce5)](https://www.mathworks.com/matlabcentral/fileexchange/172650-applied-partial-differential-equations) or [![Open in MATLAB Online Button](text:image:31d6)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Applied-PDEs&project=AppliedPDEs.prj&file=README.mlx) or [GitHub](https://github.com/MathWorks-Teaching-Resources/Applied-PDEs) \
+%[text] ## Further Resources
+%[text] - [Optimization Onramp](https://matlabacademy.mathworks.com/details/optimization-onramp/optim)
+%[text] - [Symbolic Math Onramp](https://matlabacademy.mathworks.com/details/introduction-to-symbolic-math-with-matlab/symbolic) \
+%[text] %[text:anchor:TMP_73e1] [⇦ Main Menu](file:../../MainMenu.m)
+%[text] ## Appendix
+%[text] %[text:anchor:M_5216] ### Computation details for mixed-partials counterexample
+%[text] [Return to script](internal:M_01d6)
+%[text]{"align":"center"} $f(x,y) = \\cases{\\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \\neq (0,0) \\cr 0, & (x,y) = (0,0)}${"altText":"f(x,y) = \cases{\frac{xy(x^2-y^2)}{x^2+y^2}, & (x,y) \neq (0,0) \cr 0, & (x,y) = (0,0)}"}
+%[text] In this case, by definition
+%[text]{"align":"center"} $f\_x(0,0) = \\lim\_{h \\to 0} \\frac{f(h,0)-f(0,0)}{h} = \\lim\_{h\\to 0} \\frac{0}{h} = 0,${"altText":"f\_x(0,0) = \lim\_{h \to 0} \frac{f(h,0)-f(0,0)}{h} = \lim\_{h\to 0} \frac{0}{h} = 0,"} and
+%[text]{"align":"center"} $f\_y(0,0) = \\lim\_{k \\to 0} \\frac{f(0,k)-f(0,0)}{k} = \\lim\_{k\\to 0} \\frac{0}{k} = 0${"altText":"f\_y(0,0) = \lim\_{k \to 0} \frac{f(0,k)-f(0,0)}{k} = \lim\_{k\to 0} \frac{0}{k} = 0"}.
+%[text] Thus, both partial derivatives exist at $(0,0)${"altText":"(0,0)"}. However, for all points $(x,y)${"altText":"(x,y)"} that are NOT the origin,
+%[text]{"align":"center"} $f\_x(x,y) = \\frac{2\\,x^2\\,y}{x^2+y^2}+\\frac{y\\,\\left(x^2-y^2\\right)}{x^2+y^2}-\\frac{2\\,x^2\\,y\\,\\left(x^2-y^2\\right)}{{\\left(x^2+y^2\\right)}^2} = \\frac{y\\,\\left(x^4+4\\,x^2\\,y^2-y^4\\right)}{{\\left(x^2+y^2\\right)}^2}${"altText":"f\_x(x,y) = \frac{2x^2y}{x^2+y^2}+\frac{y\left(x^2-y^2\right)}{x^2+y^2}-\frac{2x^2y\left(x^2-y^2\right)}{{\left(x^2+y^2\right)}^2} = \frac{y\left(x^4+4x^2y^2-y^4\right)}{{\left(x^2+y^2\right)}^2}"},
+%[text] So
+%[text]{"align":"center"} $\\matrix{f\_{xy}(0,0) &=& \\lim\_{k \\to 0} \\frac{f\_x(0,k)-f\_x(0,0)}{k} \\cr &= &\\lim\_{k\\to 0} \\frac{-k^5/k^4-0}{k} \\cr &=& \\lim\_{k\\to 0} \\frac{-k^5}{k^5} \\cr &=& -1}${"altText":"f\_{xy}(0,0) = \lim\_{k \to 0} \frac{f\_x(0,k)-f\_x(0,0)}{k} = \lim\_{k\to 0} \frac{-k^5\/k^4-0}{k} = \lim\_{k\to 0} \frac{-k^5}{k^5} = -1"}.
+%[text] On the other hand,
+%[text]{"align":"center"} $f\_y(x,y) = \\frac{x\\,\\left(x^2-y^2\\right)}{x^2+y^2}-\\frac{2\\,x\\,y^2}{x^2+y^2}-\\frac{2\\,x\\,y^2\\,\\left(x^2-y^2\\right)}{{\\left(x^2+y^2\\right)}^2} = -\\frac{x\\,\\left(-x^4+4\\,x^2\\,y^2+y^4\\right)}{{\\left(x^2+y^2\\right)}^2}${"altText":"f\_y(x,y) = \frac{x\left(x^2-y^2\right)}{x^2+y^2}-\frac{2xy^2}{x^2+y^2}-\frac{2xy^2\left(x^2-y^2\right)}{{\left(x^2+y^2\right)}^2} = -\frac{x\left(-x^4+4x^2y^2+y^4\right)}{{\left(x^2+y^2\right)}^2}"},
+%[text] so
+%[text]{"align":"center"} $\\matrix{f\_{yx} &=& \\lim\_{h\\to 0} \\frac{f\_y(h,0)-f\_y(0,0)}{h} \\cr & = &  \\lim\_{h\\to 0} \\frac{h^5/h^4-0}{h}\\cr & = & \\lim\_{h\\to 0} \\frac{h^5}{h^5} \\cr &=& 1}${"altText":"f\_{yx} = \lim\_{h\to 0} \frac{f\_y(h,0)-f\_y(0,0)}{h} = \lim\_{h\to 0} \frac{h^5\/h^4-0}{h} = \lim\_{h\to 0} \frac{h^5}{h^5} = 1"}.
+%[text] [Return to script](internal:M_01d6)
+%[text] [⇦ Main Menu](file:../../MainMenu.m)
+%[text] %[text:anchor:H_0AAABA39] ## Local Helper Functions
+%[text] If you want to see the details of the code, select the **View** tab and switch to **Output Inline**. Alternatively, select **Output Inline** using the icon ![live script output inline icon](text:image:9701) at the top right of the Live Editor pane.
+%[text] `GenerateExercise1` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing partial derivatives. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, $w${"altText":"w"}, and $t${"altText":"t"}.
 function [myFun,myVar] = GenerateExercise1(numVar)
 syms x y z w t f
 [myFun,myVar,~] = GenFun([x y z w t],numVar,[-4 4]);
 
 displayFormula(['"Compute the derivative of "' "f == myFun" '" with respect to "' "myVar" '"."'])
 end
-%[text]Function to check the solution to Exercise 1.
+%[text] Function to check the solution to Exercise 1.
 function CheckEx1(myDer,myFun,myVar)
 syms x y z w t
 displayFormula(['"My solution is "' "diff(f,myVar)==myDer"])
@@ -495,7 +495,7 @@ else
     displayFormula('"This is incorrect. Please try again."')
 end
 end
-%[text]Function to check the solution to Exercise 2.
+%[text] Function to check the solution to Exercise 2.
 function CheckEx2(idx)
 arguments
     idx (1,1) {mustBeInteger,mustBePositive}
@@ -520,7 +520,7 @@ if idx > 2
     disp(newline + "Please try again.")
 end
 end
-%[text]`GenerateExercise3` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing gradients. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, and $w${"altText":"w"}.
+%[text] `GenerateExercise3` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing gradients. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, and $w${"altText":"w"}.
 function [myFun,varList] = GenerateExercise3(numVar)
 syms x y z w
 [myFun,~,varList] = GenFun([x y z w],numVar,[-4 4]);
@@ -533,7 +533,7 @@ else
 end
 displayFormula(['"Compute the gradient of "' "f == myFun" '"."'])
 end
-%[text]Function to check the solution to Exercise 3.
+%[text] Function to check the solution to Exercise 3.
 function CheckEx3(myDer,myFun,varList)
 syms x y z w
 myDim = numel(varList);
@@ -571,7 +571,7 @@ else
     end
 end
 end
-%[text]`GenerateExercise4` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing directional derivatives in directions $\\vec{u}${"altText":"\vec{u}"}`=MyVec`. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, and $z${"altText":"z"}. The dimensionality is defined by `numVar`. As used in this script, that is `numVar=2` or `numVar=3`.
+%[text] `GenerateExercise4` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing directional derivatives in directions $\\vec{u}${"altText":"\vec{u}"}`=MyVec`. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, and $z${"altText":"z"}. The dimensionality is defined by `numVar`. As used in this script, that is `numVar=2` or `numVar=3`.
 function [myFun,myVec,varList] = GenerateExercise4(numVar)
 syms x y z u
 [myFun,~,varList] = GenFun([x y z],numVar,[-3 3]);
@@ -586,7 +586,7 @@ end
 myVec = randi([-10 10],[myDim 1]);
 displayFormula(['"Compute the directional derivative of "' "f == myFun" '" in the direction "' "u==myVec" '"."'])
 end
-%[text]Function to check the solution to Exercise 4.
+%[text] Function to check the solution to Exercise 4.
 function CheckEx4(myDu,myFun,myVec,myVars)
 arguments
     myDu (:,1)
@@ -609,7 +609,7 @@ else
     end
 end
 end
-%[text]`GenerateExercise5` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving sums, differences, and products of polynomials, sines, cosines, exponentials, and logarithms for computing partial derivatives using the chain rule with $x = u(s,t)${"altText":"x = u(s,t)"} and $y = v(s,t)${"altText":"y = v(s,t)"}.
+%[text] `GenerateExercise5` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving sums, differences, and products of polynomials, sines, cosines, exponentials, and logarithms for computing partial derivatives using the chain rule with $x = u(s,t)${"altText":"x = u(s,t)"} and $y = v(s,t)${"altText":"y = v(s,t)"}.
 function [myFun,myVars,myVarFuns] = GenerateExercise5(degs)
 syms x y t s f(x,y)
 
@@ -630,7 +630,7 @@ displayFormula([symStr1;
     '"where "' "f == myFun" '","' "" ""; ...
     '" with "' "x==xFun" '" and "' "y == yFun" '"."'])
 end
-%[text]Function to check the solution to Exercise 5.
+%[text] Function to check the solution to Exercise 5.
 function CheckEx5(dfds,dfdt,myFun,myVars,myVarFuns)
 syms x y s t f
 comboFun = subs(myFun,[x y],myVarFuns);
@@ -659,7 +659,7 @@ else
     displayFormula(['"No, "' "diff(f,t) ~= dfdt"])
 end
 end
-%[text]`GenerateExercise6` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing higher-order partial derivatives. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, $w${"altText":"w"}, and $t${"altText":"t"}. As coded, the value of `order` can be 2 or 3 in this script.
+%[text] `GenerateExercise6` uses [`GenFun.m`](file:../../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing higher-order partial derivatives. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, $w${"altText":"w"}, and $t${"altText":"t"}. As coded, the value of `order` can be 2 or 3 in this script.
 function [myFun,myDerVars] = GenerateExercise6(numVar,order)
 syms x y z w t f
 [myFun,~,varList] = GenFun([x y z w t],numVar,[-4 4]);
@@ -685,7 +685,7 @@ end
 
 displayFormula(['"Compute the "' str1 '" order partial derivative "' str '", where "' "f == myFun" '"."'])
 end
-%[text]Function to check the solution to Exercise 6.
+%[text] Function to check the solution to Exercise 6.
 function CheckEx6(myFun,myDerVars,mySoln)
 syms x y z t w
 
@@ -723,7 +723,7 @@ else
     displayFormula([str4 '" = "' "mySoln"])
 end
 end
-%[text][Return to use of `DrawSlicesOnPlot`](internal:M_27cc)
+%[text] [Return to use of `DrawSlicesOnPlot`](internal:M_27cc)
 function [MyXLine,MyYLine,lgd] = DrawSlicesOnPlot %[text:anchor:M_3a50]
 % Draw a surface with constant slices and return handles to the constant-x
 % line, constant-y line, and the legend so the lines can be redefined
@@ -747,7 +747,7 @@ MyYLine = plot3(MySurface.Parent,x,ones(size(y)),x.^2+3,LineWidth=2);
 hold off
 lgd = legend(["" "$f(1,y)$" "$f(x,1)$"],Interpreter="latex");
 end
-%[text][Return to use of `DrawSlicesOnPlot`](internal:M_27cc) [Return to use of `MoveLinesOnPlot`](internal:M_39b8)
+%[text] [Return to use of `DrawSlicesOnPlot`](internal:M_27cc) [Return to use of `MoveLinesOnPlot`](internal:M_39b8)
 function MoveLinesOnPlot(ConstX,ConstY,MyXLine,MyYLine,lgd) %[text:anchor:M_0d97]
 % Use the graphics handles returned by DrawSlicesOnPlot to update
 % the plot with new slices at z = f(ConstX,y) and z = f(x,ConstY)
@@ -767,7 +767,7 @@ MyYLine.ZData = x.^2*ConstY+3*ConstY^2;
 % Update the labels in the legend
 lgd.String = ["$f("+ConstX+",y)$" "$f(x," + ConstY + ")$"];
 end
-%[text][Return to use of `MoveLinesOnPlot`](internal:M_39b8) [Return to use of `DrawGrad`](internal:M_4f76)
+%[text] [Return to use of `MoveLinesOnPlot`](internal:M_39b8) [Return to use of `DrawGrad`](internal:M_4f76)
 function [EdgeStrength,direction] = DrawGrad(EdgeImage,Position,Shift,DrawRealTime,ScalingFactor) % Function to calculate and draw gradient - This function can probably be part of the script. %[text:anchor:M_5542]
 % EdgeImage -The edge image picture
 % Position -The position coordinates
@@ -832,7 +832,7 @@ end
 quiver(Position1(1)+Shift(1),Position1(2)+Shift(2),fx,fy,0,LineWidth=2,SeriesIndex=6,MaxHeadSize=0.5);
 
 end
-%[text][Return to use of `DrawGrad`](internal:M_4f76) [Return to use of `Visualize1DGradientDescent`](internal:M_104d)
+%[text] [Return to use of `DrawGrad`](internal:M_4f76) [Return to use of `Visualize1DGradientDescent`](internal:M_104d)
 function Visualize1DGradientDescent(L,alpha,w0,n) %[text:anchor:M_815d]
 % Plot the function L(w) and the initial guess w0
 % Then follow the gradient descent algorithm with learning rate alpha
@@ -869,7 +869,7 @@ for k = 1:10:(n+1)
     displayFormula(['"After "' "idx" '" iterations, the minimum value is calculated to be "' "wMin"])
 end
 end
-%[text][Return to use of `Visualize1DGradientDescent`](internal:M_104d) [Return to use of `PlotGradientDescent`](internal:M_93cd)
+%[text] [Return to use of `Visualize1DGradientDescent`](internal:M_104d) [Return to use of `PlotGradientDescent`](internal:M_93cd)
 function PlotGradientDescent(L,gradL,alpha,w0,n) %[text:anchor:M_1c05]
 % Plot the surface z = L and the initial guess w0
 % Implement gradient descent with learning rate alpha for n steps
@@ -912,7 +912,7 @@ for k = 1:n
     pause(0.2)
 end
 end
-%[text][Return to use of `PlotGradientDescent`](internal:M_93cd) [Return to use of `PlotIAsImage`](internal:M_2b44)
+%[text] [Return to use of `PlotGradientDescent`](internal:M_93cd) [Return to use of `PlotIAsImage`](internal:M_2b44)
 function PlotIAsImage(I,Ix,Iy) %[text:anchor:M_1da3]
 [x,y] = meshgrid(1:200);
 tl = tiledlayout(1,2);
@@ -933,7 +933,7 @@ view([0 -90])
 title("A filled contour plot of I")
 title(tl,"I Plotted as a function")
 end
-%[text][Return to use of `PlotIAsImage`](internal:M_2b44) [Return to use of `PlotXrayImages`](internal:M_5767)
+%[text] [Return to use of `PlotIAsImage`](internal:M_2b44) [Return to use of `PlotXrayImages`](internal:M_5767)
 function PlotXrayImages(I,Islice,EdgeStrength,nx,ny) %[text:anchor:M_7e8d]
 
 fig = figure(Units="normalized",Position=[0.05 0.05 0.9 1.1]); 
@@ -957,7 +957,7 @@ nexttile(tl,13,[1 4])
 histogram(Islice(:))
 title("Histogram of image intensity values")
 end
-%[text][Return to use of `PlotXrayImages`](internal:M_5767) [Return to use of `AddDirectionalDerivative`](internal:M_6305)
+%[text] [Return to use of `PlotXrayImages`](internal:M_5767) [Return to use of `AddDirectionalDerivative`](internal:M_6305)
 function AddDirectionalDerivative(ax,x0,y0,u,lgd,opts) %[text:anchor:M_48d7]
 arguments
     ax 
@@ -1001,7 +1001,7 @@ if opts.ManyUs
 end
 
 end
-%[text][Return to use of `AddDirectionalDerivative`](internal:M_6305) [Return to use of `VisualizeDirectionalDerivative`](internal:M_97b4)
+%[text] [Return to use of `AddDirectionalDerivative`](internal:M_6305) [Return to use of `VisualizeDirectionalDerivative`](internal:M_97b4)
 function VisualizeDirectionalDerivative(gradf,uNorm,u,f,opts) %[text:anchor:M_4789]
 % Plot a surface z = f(x,y) with an overlay of the directional derivatives
 % D_{u}f over a square domain -MaxMin <= x,y <= MaxMin with a spacing of
@@ -1070,7 +1070,7 @@ subtitle("$f = " + latex(f) + "$", Interpreter="latex")
 view(45,30)
 hold off
 end
-%[text][Return to use of `VisualizeDirectionalDerivative`](internal:M_97b4)
+%[text] [Return to use of `VisualizeDirectionalDerivative`](internal:M_97b4)
 
 %[appendix]{"version":"1.0"}
 %---
