@@ -51,7 +51,7 @@ fy = diff(f,y)
 [myFun,myVar] = GenerateExercise1(3);
 %%
 %[text] Enter your solution in the [edit field](internal:M_18e5):
-myDerivative = str2sym(""); %[control:editfield:373a]{"position":[24,26]} %[text:anchor:M_18e5]
+myDerivative = str2sym("1/sqrt(y)"); %[control:editfield:373a]{"position":[24,35]} %[text:anchor:M_18e5]
   %[control:button:4521]{"position":[1,2]}
 CheckEx1(myDerivative,myFun,myVar)
 %%
@@ -207,7 +207,8 @@ gradf = gradient(f_Function);
 uNorm = u/norm(u);
 
 Du = simplify(dot(gradf,uNorm));
-displayFormula("D_u*f == Du")
+syms f
+displayFormula(["f==f_Function";"D_u*f == Du"])
 %[text] %[text:anchor:M_7942] **Visualization**
 VisualizeDirectionalDerivative(gradf,uNorm,u,f_Function,MaxMin=1.8,Refinement=6)
 %[text] See code for [`VisualizeDirectionalDerivative`](internal:M_025e).
@@ -229,7 +230,7 @@ CheckEx4(myDu,myFun,myVec,myVars)
 %[text] **Example**
 %[text] Compute the derivative $\\frac{dz}{dt}${"altText":"\frac{dz}{dt}"} if $z = x^2+y^2${"altText":"z = x^2+y^2"} and $x = t^2${"altText":"x = t^2"} and $y= \\sin(t)${"altText":"y= \sin(t)"}.
   %[control:button:8e33]{"position":[1,2]}
-syms x y
+syms x y f
 f_func = x^2 + y^2; %[control:editfield:095b]{"position":[10,19]}
 %[text] Substituting first:
 syms t
@@ -246,7 +247,7 @@ dydt = diff(yt,t);                     % Compute dy/dt
 assume([x y],"real")                   % Tell the symbolic engine that we are working with real values x and y
 gradf = gradient(f_func);              % Compute ∇f = [∂f/∂x ∂f/∂y]
 AltExpr = dot(gradf,[dxdt; dydt]);     % Compute the chain rule: df/dt = ∇f⋅[dx/dt dy/dt]
-displayFormula("dot(gradf,[dxdt; dydt]) == AltExpr")
+displayFormula("diff(f,t) == AltExpr")
 %[text] Plugging in the definitions of $x(t)${"altText":"x(t)"} and $y(t)${"altText":"y(t)"},
 AfterSub = subs(AltExpr,[x y],[xt yt]);  % Substitute the parameterizations of x and y in terms of t
 displayFormula("diff(f,t) == AfterSub")  % Display the results of the calculation using the chain rule
@@ -448,6 +449,11 @@ CheckEx6(myFun,myDerVars,mySoln)
 %[text] %[text:anchor:H_0AAABA39] ## Local Helper Functions
 %[text] If you want to see the details of the code, select the **View** tab and switch to **Output Inline**. Alternatively, select **Output Inline** using the icon ![live script output inline icon](text:image:42d0) at the top right of the Live Editor pane.
 %[text] `GenerateExercise1` uses [`GenFun.m`](file:../FunctionLibrary/GenFun.m) to randomly generate practice problems involving combinations of polynomials, sines, cosines, exponentials, and logarithms for computing partial derivatives. The variables that may appear are $x${"altText":"x"}, $y${"altText":"y"}, $z${"altText":"z"}, $w${"altText":"w"}, and $t${"altText":"t"}.
+
+%%
+%[text] ## Help us Improve
+%[text] [Share your feedback](<matlab: ShareFeedback>) to help us improve this module.
+
 function [myFun,myVar] = GenerateExercise1(numVar)
 syms x y z w t f
 [myFun,myVar,~] = GenFun([x y z w t],numVar,[-4 4]);
@@ -457,7 +463,8 @@ end
 %[text] Function to check the solution to Exercise 1.
 function CheckEx1(myDer,myFun,myVar)
 syms x y z w t
-displayFormula(['"My solution is "' "diff(f,myVar)==myDer"])
+displayFormula(["'My solution is '" "diff(f,myVar)==myDer"], ...
+    ["f","myVar","myDer"],{myFun,myVar,myDer})
 correctAns = diff(myFun,myVar);
 if isAlways(correctAns==myDer,"Unknown","false")
     displayFormula('"This is correct."')
@@ -657,7 +664,7 @@ displayFormula(['"Compute the "' str1 '" order partial derivative "' str '", whe
 end
 %[text] Function to check the solution to Exercise 6.
 function CheckEx6(myFun,myDerVars,mySoln)
-syms x y z t w
+syms x y z t w f var3
 
 order = numel(myDerVars);
 
@@ -685,12 +692,16 @@ switch order
         str4 = "diff(diff(diff(f,var1),var2),var3)";
 end
 
+formulaVars=["f","myFun","var1","var2","var3","step1","step2","CorrectAns","mySoln"];
+formulaValues={f,myFun,var1,var2,var3,step1,step2,CorrectAns,mySoln};
 if isAlways(CorrectAns == mySoln,"Unknown","false")
-    displayFormula(['"Correct! The "' str1 '" derivative of "' "f==myFun" '" with respect to "' str2 '" is "'])
-    displayFormula([str3 '" = "' "CorrectAns"])
+    displayFormula(['"Correct! The "' str1 '" derivative of "' "f==myFun" '" with respect to "' str2 '" is "'], ...
+        formulaVars,formulaValues)
+    displayFormula([str3 '" = "' "CorrectAns"],formulaVars,formulaValues)
 else
-    displayFormula(['"Incorrect! The "' str1 '" derivative of "' "f==myFun" '" with respect to "' str2 '" is not "'])
-    displayFormula([str4 '" = "' "mySoln"])
+    displayFormula(['"Incorrect! The "' str1 '" derivative of "' "f==myFun" '" with respect to "' str2 '" is not "'], ...
+        formulaVars,formulaValues)
+    displayFormula([str4 '" = "' "mySoln"],formulaVars,formulaValues)
 end
 end
 %[text] [Return to use of `DrawSlicesOnPlot`](internal:M_295d)

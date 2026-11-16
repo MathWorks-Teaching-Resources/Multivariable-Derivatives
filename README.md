@@ -43,6 +43,8 @@ This module assumes knowledge of single variable calculus, vectors, including ve
 
 ## Getting Started
 
+For MATLAB R2024b or older, download the [legacy MLX version](https://github.com/MathWorks-Teaching-Resources/Multivariable-Derivatives/releases/tag/mlx).
+
 ### Accessing the Module
 
 ### **On MATLAB Online:**

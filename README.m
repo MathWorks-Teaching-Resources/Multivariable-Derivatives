@@ -18,6 +18,8 @@
 %[text] | <p></p><p></p><p>[Calculus: Derivatives](https://www.mathworks.com/matlabcentral/fileexchange/99249-calculus-derivatives) </p> | ![dg shaded in red](text:image:71a6) | <p></p><p>[![File Exchange badge](text:image:925e)](https://www.mathworks.com/matlabcentral/fileexchange/99249-calculus-derivatives)</p><p>[![Open in MATLAB Online Button](text:image:20be)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Calculus-Derivatives&project=Derivatives.prj&file=README.mlx) </p><p>[GitHub](https://github.com/MathWorks-Teaching-Resources/Calculus-Derivatives) </p> |
 %[text:table]
 %[text] %[text:anchor:H_330E72C3] ### Getting Started
+%[text] For MATLAB R2024b or older, download the [legacy MLX version](https://github.com/MathWorks-Teaching-Resources/Multivariable-Derivatives/releases/tag/mlx).
+%[text] 
 %[text] #### Accessing the Module
 %[text] #### **On MATLAB Online:**
 %[text] Use the [![Open in MATLAB Online Button](text:image:2c6c)](https://matlab.mathworks.com/open/github/v1?repo=MathWorks-Teaching-Resources/Multivariable-Derivatives&project=Derivatives.prj) link to download the module. You will be prompted to log in or create a MathWorks account. The project will be loaded, and you will see an app with several navigation options to get you started.
@@ -49,7 +51,7 @@
 %[text] - [Educator Page](https://www.mathworks.com/academia/educators.html) \
 %[text] %[text:anchor:H_0FA5DA18] ## Contribute 
 %[text] Looking for more? Find an issue? Have a suggestion? Please contact the [MathWorks teaching resources team](mailto:%20onlineteaching@mathworks.com). If you want to contribute directly to this project, you can find information about how to do so in the [CONTRIBUTING.md](https://github.com/MathWorks-Teaching-Resources/Multivariable-Derivatives/blob/release/CONTRIBUTING.md) page on GitHub.
-%[text] 
+%%
 %[text] *©* Copyright 2026 The MathWorks, Inc
 
 %[appendix]{"version":"1.0"}
